@@ -59,7 +59,7 @@ export const Header = forwardRef(function Header({ className }, ref) {
         )}
       />
       {/* <Search /> */}
-      <div></div> {/* remove this for search */}
+      <div className="hidden lg:block"></div> {/* remove this for search */}
       <div className="flex items-center gap-5 lg:hidden">
         <MobileNavigation />
         <Link href="/" aria-label="Home">
