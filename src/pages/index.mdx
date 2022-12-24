@@ -1,0 +1,32 @@
+import { HeroPattern } from '@/components/HeroPattern'
+
+export const description =
+  'In this documentation you will find everything you need to know about the SheetDB API. SheetDB is a tool that will turn your Google Spreadsheet into a JSON API.'
+
+export const sections = [
+//   { title: 'Getting started', id: 'guides' },
+]
+
+<HeroPattern />
+
+# SheetDB Documentation
+
+SheetDB is a tool that will turn your Google Spreadsheet into a JSON API. In this documentation you will find everything you need to know about the SheetDB API. If you have any questions, don't hesitate to contact us. {{ className: 'lead' }}
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/quickstart" arrow="right" children="Quickstart" />
+  <Button href="/sheetdb-api/read" variant="outline" children="Explore our API" />
+</div>
+
+## Getting started {{ anchor: false }}
+
+To get started, create a new API in your [dashboard](https://sheetdb.io/app/apis), then make sure your spreadsheet is in the correct format - column names should be in the first row. After creating the API, you will receive a unique ID.
+
+<div className="not-prose">
+  <Button
+    href="/quickstart#making-your-first-api-request"
+    variant="text"
+    arrow="right"
+    children="Make your first request"
+  />
+</div> 

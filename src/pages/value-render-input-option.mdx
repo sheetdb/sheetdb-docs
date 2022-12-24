@@ -1,0 +1,23 @@
+export const description =
+  'In this guide, we will look at the rules about rendering and inserting data to Google Spreadsheet.'
+
+# Value options
+
+Rendering and inserting data in Google Spreadsheets. {{ className: 'lead' }}
+
+---
+
+## Value Render Option
+
+You can add the optional `mode` parameter to your <code className="ring-1 ring-inset ring-emerald-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-emerald-400">GET</code> requests. It controls how the values should be displayed. This parameter can have the following values:
+
+* `FORMATTED_VALUE` (default) - Values will be calculated & formatted in the reply according to the cell's formatting. Formatting is based on the spreadsheet's locale, not the requesting user's locale. For example, if A1 is 1.23 and A2 is =A1 and formatted as currency, then A2 would return "$1.23".
+* `UNFORMATTED_VALUE` - Values will be calculated, but not formatted in the reply. For example, if A1 is 1.23 and A2 is =A1 and formatted as currency, then A2 would return the number 1.23.
+* `FORMULA` - Values will not be calculated. The reply will include the formulas. For example, if A1 is 1.23 and A2 is =A1 and formatted as currency, then A2 would return "=A1".
+
+## Value Input Option
+
+You can add an optional `mode` parameter to your <code className="ring-1 ring-inset ring-sky-300 bg-sky-400/10 text-sky-500 dark:ring-sky-400/30 dark:bg-sky-400/10 dark:text-sky-400">POST</code> and <code className="ring-1 ring-inset ring-amber-300 bg-amber-400/10 text-amber-500 dark:ring-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400">PATCH</code> requests (create and update). It controls whether the input strings are parsed and how. This parameter can have one of two values:
+
+* `USER_ENTERED` (default) - The input is parsed exactly as if it were entered into the Google Sheets UI, so "Mar 1 2016" becomes a date, and "=1+2" becomes a formula. Formats may also be inferred, so "$100.15" becomes a number with currency formatting.
+* `RAW` - The input is not parsed and is simply inserted as a string, so the input "=1+2" places the string "=1+2" in the cell, not a formula. (Non-string values like booleans or numbers are always handled as RAW.)

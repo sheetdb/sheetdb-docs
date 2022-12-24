@@ -1,0 +1,302 @@
+export const description =
+  'This section describes the other methods of the SheetDB API.'
+
+# Other methods
+
+This section describes the other methods of the SheetDB API. {{ className: 'lead' }}
+
+---
+
+## Get value of single cell {{ tag: 'GET', label: '/api/v1/{API_ID}/cells/{CELL}' }}
+
+<Row>
+  <Col>
+    If you want to retrieve the contents of a single cell using coordinates, such as A1, B10, etc. you can use this endpoint. It returns an array with the coordinates as the key and the contents of the cell as the value.
+
+    If you want to get multiple cells, just separate them with a comma. Example:
+
+    [https://sheetdb.io/api/v1/58f61be4dda40/cells/A1,A2,B5](https://sheetdb.io/api/v1/58f61be4dda40/cells/A1,A2,B5)
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    ```json {{ title: 'JSON Response' }}
+    {
+        "A1": "id",
+        "A2": "1",
+        "B5": "Steve"
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## Import JSON {{ tag: 'POST', label: '/api/v1/{API_ID}/import/json' }}
+
+<Row>
+  <Col>
+    If you have an empty spreadsheet, with the first row unfilled, you can use this endpoint to import the entire JSON file. Make sure the spreadsheet is empty, otherwise the content will be appended below.
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="json" type="json">
+            Should contain the json array you want to import.<br />
+            Example: `[{'id': 4,'name': "Mark"},{'id': 5,'name': "Susan"}]`
+        </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="POST" label="/api/v1/{API_ID}/import/json">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X POST -H "Content-Type: application/json" \
+        https://sheetdb.io/api/v1/58f61be4dda40/import/json \
+        -d '{"json":[{"id": 4,"name": "Mark"},{"id": 5,"name": "Susan"}]}'
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/import/json', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            json: [
+                {
+                    "id": 4,
+                    "name": "Mark"
+                },
+                {
+                    "id": 5,
+                    "name": "Susan"
+                }
+            ]
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        'json' => [
+            [
+                "id" => 4,
+                "name" => "Mark"
+            ],
+            [
+                "id" => 5,
+                "name" => "Susan"
+            ]
+        ]
+    ];
+
+    $response = $client->post('https://sheetdb.io/api/v1/58f61be4dda40/import/json', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        created: 1
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## List of available sheets {{ tag: 'GET', label: '/api/v1/{API_ID}/sheets' }}
+
+<Row>
+  <Col>
+    Returns a list of all available sheets (tabs).
+  </Col>
+  <Col>
+    ```json {{ title: 'JSON Response' }}
+    {
+        "sheets": [
+            "Sheet1",
+            "Sheet2",
+            "large"
+        ]
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## Create new sheet {{ tag: 'POST', label: '/api/v1/{API_ID}/sheet' }}
+
+<Row>
+  <Col>
+    Creates a new sheet (tab) in the spreadsheet.
+
+    <Note>
+         This method works only in some plans, more in our [pricing](https://sheetdb.io/pricing).
+    </Note>
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="name" type="string">
+            name of the new sheet
+        </Property>
+        <Property name="first_row" type="array">
+            column names in the form of an array, example: `["id", "name"]`
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="POST" label="/api/v1/{API_ID}/sheet">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X POST -H "Content-Type: application/json" \
+      https://sheetdb.io/api/v1/58f61be4dda40/sheet \
+      -d '{"name": "New Sheet", "first_row":["id","name"]}'
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/sheet', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "name": "New Sheet",
+            "first_row": ["id","name"],
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        "name" => "New Sheet",
+        "first_row" => ["id","name"],
+    ];
+
+    $response = $client->post('https://sheetdb.io/api/v1/58f61be4dda40/sheet', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        created: 1
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## Delete a sheet {{ tag: 'DELETE', label: '/api/v1/{API_ID}/sheet' }}
+
+<Row>
+  <Col>
+    Deletes a sheet (tab) and the content. Requires one param:
+
+    <Note>
+         This method works only in some plans, more in our [pricing](https://sheetdb.io/pricing).
+    </Note>
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="name" type="string">
+            name of the sheet you want to delete
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="DELETE" label="/api/v1/{API_ID}/sheet">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE -H "Content-Type: application/json" \
+      https://sheetdb.io/api/v1/58f61be4dda40/sheet \
+      -d '{"name": "New Sheet"}'
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/sheet', {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "name": "New Sheet",
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        "name" => "New Sheet",
+    ];
+
+    $response = $client->delete('https://sheetdb.io/api/v1/58f61be4dda40/sheet', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        created: 1
+    }
+    ```
+  </Col>
+</Row>

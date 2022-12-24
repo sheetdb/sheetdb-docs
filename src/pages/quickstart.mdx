@@ -1,0 +1,111 @@
+import Image from 'next/image'
+
+import testSpreadsheet from '@/images/screenshots/test-document.jpg'
+
+export const description =
+  'This guide will get you all set up and ready to use the SheetDB API. We’ll cover how to get started with an API and how to make your first API request.'
+
+# Installation
+
+If you use our API via HTTP requests, you do not need to install anything. However, if you want, you can use one of our ready-made solutions: {{ className: 'lead' }}
+
+* **HTML** - you can use SheetDB with pure HTML, go to the [handlebars library](/handlebars) section
+* **WordPress** - [WordPress plugin](https://wordpress.org/plugins/sheetdb/)
+* **PHP** - [composer library](https://github.com/sheetdb/sheetdb-php)
+* **JavaScript** - [npm package](https://github.com/sheetdb/sheetdb-js)
+* **Node.js** - [npm package](https://github.com/sheetdb/sheetdb-node)
+
+## Example spreadsheet
+
+To make it convenient for you to explore this documentation, you can use our test API. As mentioned earlier in the first row there should be column names, for this API they are `id`, `name`, `age` and `comment`.
+
+<Note>
+    You can modify the test API - it resets every fifteen minutes.
+</Note>
+
+Here is a link to the Google spreadsheet: [SheetDB test document](https://docs.google.com/spreadsheets/d/1mrsgBk4IAdSs8Ask5H1z3bWYDlPTKplDIU_FzyktrGk/edit#gid=0)<br />
+Our test API ID is `58f61be4dda40` and the endpoint URL is: [https://sheetdb.io/api/v1/58f61be4dda40](https://sheetdb.io/api/v1/58f61be4dda40)
+
+<Image
+    src={testSpreadsheet}
+    alt="SheetDB test spreadsheet document"
+    className="object-contain object-left w-full md:w-[600px]"
+/>
+
+## Making your first API request
+
+Now you are ready to make your first call to the SheetDB API. Below you can see how to send a GET request to our test API.
+
+<CodeGroup tag="GET" label="/api/v1/{API_ID}">
+
+```bash {{ title: 'cURL' }}
+curl https://sheetdb.io/api/v1/58f61be4dda40
+```
+
+```js
+fetch('https://sheetdb.io/api/v1/58f61be4dda40')
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+```
+
+```php
+$client = new GuzzleHttp\Client();
+
+$response = $client->get('https://sheetdb.io/api/v1/58f61be4dda40');
+
+$response->getBody()->getContents();
+```
+
+</CodeGroup>
+
+```json {{ title: 'JSON Response' }}
+[
+    {
+        "id": "1",
+        "name": "Tom",
+        "age": "15",
+        "comment": ""
+    },
+    {
+        "id": "2",
+        "name": "Alex",
+        "age": "24",
+        "comment": ""
+    },
+    {
+        "id": "3",
+        "name": "John",
+        "age": "51",
+        "comment": ""
+    },
+    {
+        "id": "61",
+        "name": "Steve",
+        "age": "22",
+        "comment": "special"
+    },
+    {
+        "id": "422",
+        "name": "James",
+        "age": "19",
+        "comment": ""
+    }
+]
+```
+
+<div className="not-prose">
+  <Button
+    href="/sheetdb-api/read"
+    variant="text"
+    arrow="right"
+    children="Read the docs for the GET endpoint"
+  />
+</div>
+
+## What's next?
+
+Great, you're now set up with an API and have made your first request. Here are a few links that might be handy as you venture further into the SheetDB API:
+
+- [Check out the CRUD API](/sheetdb-api/read)
+- [Learn about the different error messages](/errors)
+- [Support for multiple sheets](/multiple-sheets)

@@ -1,0 +1,80 @@
+export const description =
+  'In this guide, we’ll look at how authentication works. SheetDB offers two ways to authenticate your API requests: Bearer token and Basic authentication.'
+
+# Authentication
+
+We do not require authentication to use our API however if you want to add an extra layer of security you can enable it. SheetDB offers two ways to authenticate your API requests: Bearer token and Basic authentication. {{ className: 'lead' }}
+
+---
+
+## Bearer token
+
+We recommend to authenticate with Bearer token. You will need your access token — each API has a separate and unique token. You can find it in the settings tab of your API.
+
+<CodeGroup tag="GET" label="/api/v1/{API_ID}">
+
+```bash {{ title: 'cURL' }}
+curl https://sheetdb.io/api/v1/58f61be4dda40 \
+  -H "Authorization: Bearer {token}"
+```
+
+```js
+fetch('https://sheetdb.io/api/v1/58f61be4dda40', {
+        method:'GET', 
+        headers: {'Authorization': 'Bearer {token}'}
+    })
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+```
+
+```php
+$client = new GuzzleHttp\Client();
+
+$response = $client->get('https://sheetdb.io/api/v1/58f61be4dda40', [
+    'headers' => [ 'Authorization' => 'Bearer {token}' ],
+]);
+
+$response->getBody()->getContents();
+```
+
+</CodeGroup>
+
+
+## Basic authentication
+
+<Note>
+    If you can, use <a href="#bearer-token">Bearer Token</a> instead of Basic Auth.
+</Note>
+
+With basic authentication, you use username and password to authenticate your HTTP requests. The username and password are different for each API, you can find them in the settings tab of your API.
+
+<CodeGroup tag="GET" label="/api/v1/{API_ID}">
+
+```bash {{ title: 'cURL' }}
+curl https://sheetdb.io/api/v1/58f61be4dda40 \
+    -u username:password
+```
+
+```js
+fetch('https://sheetdb.io/api/v1/58f61be4dda40', {
+        method:'GET', 
+        headers: {'Authorization': 'Basic ' + btoa('login:password')}
+    })
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+
+```
+
+```php
+$client = new GuzzleHttp\Client();
+
+$credentials = base64_encode('login:password');
+
+$response = $client->get('https://sheetdb.io/api/v1/58f61be4dda40', [
+    'headers' => [ 'Authorization' => 'Basic ' . $credentials ],
+]);
+
+$response->getBody()->getContents();
+```
+
+</CodeGroup>

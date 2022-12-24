@@ -1,0 +1,133 @@
+export const description =
+  'Handlebars is for all those who don\'t want to play with any programming languages, but want to have all the super powers of SheetDB on their websites.'
+
+# HTML snippet
+
+Handlebars is for all those who don't want to play with any programming languages, but want to have all the super powers of SheetDB on their websites. {{ className: 'lead' }}
+
+Handlebars allows you to interact with Google Spreadsheet from your website using only HTML. {{ className: 'lead' }}
+
+## Installation
+
+Add the following tag to your site:
+
+`<script src="https://sheetdb.io/handlebars.js"></script>`
+
+Preferred location is before the closing `</body>` tag
+
+That's it. You are ready to use our handlebars snippet.
+
+<Note>
+    It is important that the script tag is added to the page only once!
+</Note>
+
+## Display data
+
+Using a snippet comes down to two simple steps.
+
+1. Add `data-sheetdb-url="SHEETDB_API_URL"` to any HTML element.
+2. Add handlebars `{{` and `}}` in any child element. Between handlebars, specify the name of the column whose contents you want to display.
+
+```html {{ title: 'Simple use of snippet in HTML' }}
+<div data-sheetdb-url="https://sheetdb.io/api/v1/58f61be4dda40">
+    <p>{{name}}</p>
+</div>
+```
+
+<Note>
+     If you are using Vue.js, you have to use `v-pre` attribute on elements that contain our snippets.
+</Note>
+
+## Optional attributes
+
+<Row>
+    <Col>
+        <Properties>
+            <Property name="data-sheetdb-sheet" type="string">
+                By default, you will receive data from the first sheet (tab). If you want to work with another sheet, use this attribute and enter the name of the sheet (case sensitive).
+            </Property>
+            <Property name="data-sheetdb-limit" type="integer">
+                Limit the number of rows.
+            </Property>
+            <Property name="data-sheetdb-offset" type="integer">
+                Which result to start with (how many results to skip).
+            </Property>
+            <Property name="data-sheetdb-search" type="string">
+                Works the same way as in the [search endpoint](/sheetdb-api/search). If you want to use more than one condition join them using `&` symbol.
+                
+                Example: `data-sheetdb-search="name=Tom&age=15"`
+            </Property>
+            <Property name="data-sheetdb-search-mode" type="string">
+                If you want to use the [search_or](/sheetdb-api/search) endpoint use `or` as a value for this attribute. If you want to target one column more than once, don't forget square brackets: `data-sheetdb-search="id[]=1&id[]=2"`
+            </Property>
+            <Property name="data-sheetdb-sort-by" type="string">
+                The name of the column by which you want to sort the results.
+            </Property>
+            <Property name="data-sheetdb-sort-order" type="string">
+                Sort order. You can choose:
+                * `asc` - sort in ascending order
+                * `desc` - sort in descending order
+                * `random` - get data in random order
+            </Property>
+            <Property name="data-sheetdb-not-found-message" type="string">
+                You can set the message to be displayed if no result is found, e.g. in query string or regular search.
+            </Property>
+        </Properties>
+    </Col>
+    <Col sticky>
+        ```html
+        <div data-sheetdb-url="https://sheetdb.io/api/v1/58f61be4dda40"
+            data-sheetdb-sort-by="age"
+            data-sheetdb-sort-order="asc"
+            data-sheetdb-search="id[]=1&id[]=2"
+            data-sheetdb-search-mode="or">
+            <p>ID: {{id}} - {{name}} ({{age}})</p>
+        </div>
+        ```
+    </Col>
+</Row>
+
+---
+
+## Query strings
+
+If you want different content to be displayed depending on the website address, use the query string feature. You can use this just like the search method. To the address bar of YOUR site add what you want to search for. For example, if you want to display only the first id, use this address: `https://yoursite.com?id=1`. You also need to specify the parameters that will be filtered in the `data-sheetdb-query-string` attribute. If you want to use more than one query string simply separate them with commas.
+
+```html {{ title: "Query string example" }}
+<div data-sheetdb-url="https://sheetdb.io/api/v1/58f61be4dda40"
+    data-sheetdb-query-string="id">
+    <p>ID: {{id}} - {{name}} ({{age}})</p>
+</div>
+```
+
+## Slots
+
+If you want to reuse your data elsewhere on your website, you can use the `data-sheetdb-save` attribute in the sheetdb element to save it. To reuse your data, use the `data-sheetdb-slot` attribute. You have access to the same data as in the base element. The save and slot values must be the same. This way you can reduce the usage of your quota.
+
+```html {{ title: "Slot example (this code uses 1 request)" }}
+<div data-sheetdb-url="https://sheetdb.io/api/v1/58f61be4dda40"
+    data-sheetdb-search="id=1"
+    data-sheetdb-save="my-saved-data-1">
+    <p>Name: {{name}}</p>
+</div>
+
+<!-- Other content -->
+
+<div data-sheetdb-slot="my-saved-data-1">
+    <p>Age: {{age}}</p>
+</div>
+```
+
+## Events
+
+Once all the data has been downloaded, the handlebars library will call a custom `sheetdb-downloaded` event. You can listen to this event to execute any javascript code.
+
+```js
+window.addEventListener("sheetdb-downloaded", function() {
+    // this code will be executed after all sheetdb data has been retrieved
+});
+```
+
+## Update content
+
+If you want to update the content, you can use the global function `sheetdb_upd()`. It will force a redownload of all content from the API.

@@ -1,0 +1,28 @@
+export const description =
+  'In this guide, we will look at SheetDB API limits.'
+
+# Limits
+
+If you reach the limit of your plan, your requests will return a `429` error. To increase your limit you can choose a higher plan or buy additional requests in the [billing tab](https://sheetdb.io/app/billing).
+
+In addition, there is a rate limit - 60 requests per 10 seconds from one IP address. If you need more please contact us.
+
+### Google limits
+
+Google also imposes limits on spreadsheets API:
+
+* 100 requests per 100 seconds per user
+* variable limit of requests per one spreadsheet (for 100 seconds)
+
+Both limits cannot be changed but you can bypass them using cache. You can enable the cache in your API settings. SheetDB limit will be counted as regular.
+
+Cache also speeds up response time a lot, if you plan to make a large number of GET requests turn on cache and prepare it using the `Load cache` or `Refresh cache` button in the cache tab of your API settings page.
+
+<div className="not-prose">
+  <Button
+    href="/cache"
+    variant="text"
+    arrow="right"
+    children="Read more about caching in SheetDB"
+  />
+</div>

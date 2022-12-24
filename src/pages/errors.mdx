@@ -1,0 +1,64 @@
+export const description =
+  'In this guide, we will talk about what happens when something goes wrong while you work with the API.'
+
+# Errors and status codes
+
+In this guide, we will talk about what happens when something goes wrong while you work with the API. Let's look at some status codes and error types you might encounter. {{ className: 'lead' }}
+
+You can tell if your request was successful by checking the status code when receiving an API response. If a response comes back unsuccessful, you can use the error type and error message to figure out what has gone wrong and do some rudimentary debugging. {{ className: 'lead' }}
+
+---
+
+## Categories
+
+Here is a list of the different categories of status codes returned by SheetDB. Use these to understand if a request was successful.
+
+<Properties>
+  <Property name="2xx">
+    A 2xx status code indicates a successful response.
+  </Property>
+  <Property name="4xx">
+    A 4xx status code indicates a client error — this means it's a _you_
+    problem.
+  </Property>
+  <Property name="5xx">
+    A 5xx status code indicates a server error — you shouldn't be seeing these.
+  </Property>
+</Properties>
+
+---
+
+## Status codes
+
+<Properties>
+  <Property name="200 OK">
+    The request has succeeded for GET, PUT, PATCH and DELETE requests.
+  </Property>
+  <Property name="201 Created">
+    The request has succeeded for POST requests.
+  </Property>
+  <Property name="400 Bad Request">
+    The API could not understand the request. There is probably something wrong with the data format. Each endpoint has its own guidelines.
+  </Property>
+  <Property name="401 Unauthorized">
+    An error with Google account authentication or you have entered an incorrect Barer token / Basic Auth credentials.
+  </Property>
+  <Property name="402 Payment Required">
+    Payment is required to process the request. Occurs when you try to make a request that requires a higher plan.
+  </Property>
+  <Property name="403 Forbidden">
+    Action is forbidden.
+  </Property>
+  <Property name="404 Not Found">
+    The server did not find anything matching the request.
+  </Property>
+  <Property name="429 Too Many Requests">
+    You have exceeded the request limit. Learn more about the different types of request limits in SheetDB [here](/limits).
+  </Property>
+  <Property name="500 Internal Server Error">
+    We had a problem. Try again later.
+  </Property>
+  <Property name="1015 Rate limit">
+    You are making too much requests, the limit is 60 requests per 10 seconds. Try again in a minute.
+  </Property>
+</Properties>

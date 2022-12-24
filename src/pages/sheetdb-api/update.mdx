@@ -1,0 +1,212 @@
+export const description =
+  'This section describes update (PATCH) requests to SheetDB API'
+
+# Update {{ tag: 'PATCH', label: '/api/v1/{API_ID}/{COLUMN_NAME}/{VALUE}' }}
+
+<br />
+
+## Update with single query {{ tag: 'PATCH', label: '/api/v1/{API_ID}/{COLUMN_NAME}/{VALUE}' }}
+
+<Row>
+  <Col>
+    Updates the content for the specified row. You must specify a column name and a value to find the row(s) you want to update. All rows that meet the condition will be updated. It updates only the columns passed in the `data` object, the other columns will remain unchanged.
+
+    Returns count of updated rows.
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="data" type="json">
+            The object containing the data you want to change.
+            
+            Example: `{'name': "Mark", 'age': 28}`
+        </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+
+        <Property name="mode" type="string">
+            Value Input Option, [more info here](/value-render-input-option#value-input-option).
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+
+    <CodeGroup title="Request" tag="PATCH" label="/api/v1/{API_ID}/{COLUMN_NAME}/{VALUE}">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PATCH -G https://sheetdb.io/api/v1/58f61be4dda40/id/3 \
+      -d name=Emma
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/id/3', {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            data: {
+                'name': "Emma"
+            }
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        'data' => [
+            'name' => 'Emma'
+        ]
+    ];
+
+    $response = $client->patch('https://sheetdb.io/api/v1/58f61be4dda40/id/3', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        updated: 1
+    }
+    ```
+
+  </Col>
+</Row>
+
+<br /><br />
+
+## Batch update {{ tag: 'PATCH', label: '/api/v1/{API_ID}/batch_update' }}
+
+<Row>
+  <Col>
+    <Note>
+        Batch update works only on paid accounts
+    </Note>
+
+    Update for multiple queries. The required attribute `data` should be an array, and each object in it should have a `query` (for example, "id=3").
+
+    All queries will be updated as in a regular PATCH update.
+
+    It returns the number of updated rows.
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="data" type="json">
+            An array containing the objects you want to change. Each object should contain a `query` that will filter the rows to be updated.
+
+            Example:
+            ```json
+            [
+                {
+                    "query":"id=1",
+                    "name":"Sophia",
+                    "age":20
+                },{
+                    "query":"id=2",
+                    "age":25
+                }
+            ]
+            ```
+        </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+
+        <Property name="mode" type="string">
+            Value Input Option, [more info here](/value-render-input-option#value-input-option).
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="PATCH" label="/api/v1/{API_ID}/batch_update">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X PATCH -G https://sheetdb.io/api/v1/58f61be4dda40/batch_update \
+      -d data='[{"query":"id=1","name":"Sophia","age":20},{"query":"id=2","age":25}]'
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/batch_update', {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            data: [
+                {
+                    "query":"id=1",
+                    "name":"Sophia",
+                    "age":20
+                },{
+                    "query":"id=2",
+                    "age":25
+                }
+            ]
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        'data' => [
+            [
+                "query" => "id=1",
+                "name" => "Sophia",
+                "age" => 20
+            ],[
+                "query" => "id=2",
+                "age" => 25
+            ]
+        ]
+    ];
+
+    $response = $client->patch('https://sheetdb.io/api/v1/58f61be4dda40/batch_update', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        updated: 2
+    }
+    ```
+  </Col>
+</Row>

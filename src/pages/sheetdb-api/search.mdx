@@ -1,0 +1,102 @@
+export const description =
+  'This section describes search (GET) requests to SheetDB API'
+
+# Search {{ tag: 'GET', label: '/api/v1/{API_ID}/search, /api/v1/{API_ID}/search_or' }}
+
+<br />
+
+## Search {{ tag: 'GET', label: '/api/v1/{API_ID}/search, /api/v1/{API_ID}/search_or' }}
+
+<Row>
+  <Col>
+
+    Returns an array of all rows matching the query. If any condition is not met for a row, it will not be included in the result.
+
+    If you want a row to be included in the result when any condition is met, use the serach_or endpoint, example: [https://sheetdb.io/api/v1/58f61be4dda40/search_or?name=Tom&age=22](https://sheetdb.io/api/v1/58f61be4dda40/search_or?name=Tom&age=22)
+
+    If you want to search for a string with a space, just repace space with `%20` If you want to include & symbol in your query, replace it with `%26`
+
+    ## Wildcards
+    
+    You can search using wildcards. The asterisk `*` can represent any string. Wildcard only work when READ and SEARCH permissions are **both** enabled.
+
+    ## Negative search
+
+    If you want to exclude certain rows from the search results, use an exclamation mark before the value. For example, if you want to get all rows without the one in which name = Tom, use this url:<br />
+    [https://sheetdb.io/api/v1/58f61be4dda40/search?name=!Tom](https://sheetdb.io/api/v1/58f61be4dda40/search?name=!Tom)
+
+    ## Relational operators
+    
+    You can use relational operators to determine whether a value is greater or less than a given number. Just start with `<`, `>`, `<=`, `>=` operator. Example urls:
+    * Greater than 3:<br />[https://sheetdb.io/api/v1/58f61be4dda40/search?id=>3](https://sheetdb.io/api/v1/58f61be4dda40/search?id=>3)
+    * Less than 3:<br />[https://sheetdb.io/api/v1/58f61be4dda40/search?id=\<3](https://sheetdb.io/api/v1/58f61be4dda40/search?id=\<3)
+    * Greater than or equal to 3:<br />[https://sheetdb.io/api/v1/58f61be4dda40/search?id=>=3](https://sheetdb.io/api/v1/58f61be4dda40/search?id=>=3)
+    * Less than or equal to 3:<br />[https://sheetdb.io/api/v1/58f61be4dda40/search?id=\<=3](https://sheetdb.io/api/v1/58f61be4dda40/search?id=\<=3)
+
+    ## Multiple queries for the same column
+
+    You can use multiple queries for the same column, but you have to use array notation (`[]` at the end of the column name), for example:
+
+    [https://sheetdb.io/api/v1/58f61be4dda40/search?id[]=>1&id[]=\<3](https://sheetdb.io/api/v1/58f61be4dda40/search?id[]=>1&id[]=\<3)
+
+    or
+
+    [https://sheetdb.io/api/v1/58f61be4dda40/search?name[]=!Tom&name[]=!Steve](https://sheetdb.io/api/v1/58f61be4dda40/search?name[]=!Tom&name[]=!Steve)
+
+    ---
+
+    ## Optional attributes
+
+    <Note>
+        You can use all the optional attributes from the [Read all data](#read-all-data) endpoint.
+    </Note>
+
+    <Properties>
+      <Property name="casesensitive" type="boolean">
+        By default, the search is not case-sensitive, to change it to be case-sensitive set this attribute to `true`.
+      </Property>
+    </Properties>
+
+    ## More examples
+
+    For more examples of how to use search in our API, check out this blog post [search feature in SheetDB API](https://blog.sheetdb.io/using-the-search-feature-in-sheetdb-api-to-filter-results-from-google-sheets-b2e5f1ae4b) or [this youtube tutorial](https://www.youtube.com/watch?v=hQmmhVxG0UI)
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/api/v1/{API_ID}">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://sheetdb.io/api/v1/58f61be4dda40/search \
+      -d name=tom
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/search?name=tom')
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client();
+
+    $response = $client->get('https://sheetdb.io/api/v1/58f61be4dda40/search?name=tom');
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    [
+        {
+            "id": "1",
+            "name": "Tom",
+            "age": "15",
+            "comment": ""
+        }
+    ]
+    ```
+
+  </Col>
+</Row>

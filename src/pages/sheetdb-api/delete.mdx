@@ -1,0 +1,183 @@
+export const description =
+  'This section describes delete (DELETE) requests to SheetDB API'
+
+# Delete {{ tag: 'DELETE', label: '/api/v1/{API_ID}/{COLUMN_NAME}/{VALUE}' }}
+
+<br />
+
+## Delete with single query {{ tag: 'DELETE', label: '/api/v1/{API_ID}/{COLUMN_NAME}/{VALUE}' }}
+
+<Row>
+  <Col>
+
+    Deletes the specified row(s). You must specify a column name and a value to find the row(s) you want to delete. All rows that meet the condition will be deleted.
+
+    It returns count of deleted rows.
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+    </Properties>
+
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="DELETE" label="/api/v1/{API_ID}/{COLUMN_NAME}/{VALUE}">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE -G https://sheetdb.io/api/v1/58f61be4dda40/id/3
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/id/3', {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $response = $client->delete('https://sheetdb.io/api/v1/58f61be4dda40/id/3');
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        deleted: 1
+    }
+    ```
+  </Col>
+</Row>
+
+<br />
+
+## Delete duplicates {{ tag: 'DELETE', label: '/api/v1/{API_ID}/duplicates' }}
+
+<Row>
+  <Col>
+    Deletes all duplicate (identical) rows.
+
+    It returns count of duplicated rows.
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="DELETE" label="/api/v1/{API_ID}/duplicates">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE -G https://sheetdb.io/api/v1/58f61be4dda40/duplicates
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/duplicates', {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $response = $client->delete('https://sheetdb.io/api/v1/58f61be4dda40/duplicates');
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        duplicates: 1
+    }
+    ```
+  </Col>
+</Row>
+
+<br />
+
+## All content {{ tag: 'DELETE', label: '/api/v1/{API_ID}/all' }}
+
+<Row>
+  <Col>
+    Deletes all contents of the spreadsheet except the first row (column names).
+
+    It returns count of deleted rows.
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+    <CodeGroup title="Request" tag="DELETE" label="/api/v1/{API_ID}/all">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X DELETE -G https://sheetdb.io/api/v1/58f61be4dda40/all
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/all', {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $response = $client->delete('https://sheetdb.io/api/v1/58f61be4dda40/all');
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        deleted: 5
+    }
+    ```
+  </Col>
+</Row>

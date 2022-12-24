@@ -1,0 +1,195 @@
+export const description =
+  'This section describes read (GET) requests to SheetDB API'
+
+# Read {{ tag: 'GET', label: '/api/v1/{API_ID}' }}
+
+<br />
+
+## Get content {{ tag: 'GET', label: '/api/v1/{API_ID}' }}
+
+<Row>
+  <Col>
+
+    Returns an array with all data from the spreadsheet.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="sheet" type="string">
+        The sheet (tab) you want to select.
+      </Property>
+      <Property name="limit" type="integer">
+        Limit the number of rows returned.
+      </Property>
+      <Property name="offset" type="integer">
+        Which result to start with (how many results to skip).
+      </Property>
+      <Property name="sort_by" type="string">
+        The name of the column by which you want to sort the results.
+      </Property>
+      <Property name="sort_order" type="string">
+        Sort order. You can choose:
+        * `asc` - sort in ascending order
+        * `desc` - sort in descending order
+        * `random` - get data in random order
+      </Property>
+      <Property name="sort_method" type="string">
+        If you want to sort by date, set this attribute to `date`, SheetDB will try to automatically detect the data format but it is recommended to specify the format in the `sort_date_format` attribute.
+      </Property>
+      <Property name="sort_date_format" type="string">
+        Date format, e.g. if your date is 2022-19-12 use `Y-m-d`. For date time like 2022-19-12 13:55:00 use `Y-m-d H:i:s`.<br />
+        _Applies only when sort_method=date._
+      </Property>
+      <Property name="cast_numbers" type="string">
+        If you want to cast a value into a number, use its column name here. You can use multiple column names separated by commas.
+        
+        Example: [https://sheetdb.io/api/v1/58f61be4dda40?cast_numbers=id,age](https://sheetdb.io/api/v1/58f61be4dda40?cast_numbers=id,age)
+      </Property>
+      <Property name="single_object" type="boolean">
+        If you want to get only one row as an object (not in an array), set this attribute to `true`.
+      </Property>
+      <Property name="mode" type="string">
+        Value Render Option, [more info here](/value-render-input-option#value-render-option).
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col>
+
+    <CodeGroup title="Request" tag="GET" label="/api/v1/{API_ID}">
+
+    ```bash {{ title: 'cURL' }}
+    # Sort results by id in descending order, take two
+    # and return the age as an integer.
+
+    curl -G https://sheetdb.io/api/v1/58f61be4dda40 \
+      -d sort_by=id \
+      -d sort_order=desc \
+      -d limit=2 \
+      -d cast_numbers=age
+    ```
+
+    ```js
+    // Sort results by id in descending order, take two
+    // and return the age as an integer.
+
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40?sort_by=id&sort_order=desc&limit=2&cast_numbers=age')
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    // Sort results by id in descending order, take two
+    // and return the age as an integer.
+
+    $client = new GuzzleHttp\Client();
+
+    $response = $client->get('https://sheetdb.io/api/v1/58f61be4dda40?sort_by=id&sort_order=desc&limit=2&cast_numbers=age');
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    [
+        {
+            "id": "422",
+            "name": "James",
+            "age": 19,
+            "comment": ""
+        },
+        {
+            "id": "61",
+            "name": "Steve",
+            "age": 22,
+            "comment": "special"
+        }
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Keys {{ tag: 'GET', label: '/api/v1/{API_ID}/keys' }}
+
+<Row>
+  <Col>
+    Returns an array with all column names. It's all the cells from the first row.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/api/v1/{API_ID}">
+
+    ```bash {{ title: 'cURL' }}
+    # Sort results by id in descending order, take two
+    # and return the age as an integer.
+
+    curl -G https://sheetdb.io/api/v1/58f61be4dda40/keys
+    ```
+
+    ```js
+    // Sort results by id in descending order, take two
+    // and return the age as an integer.
+
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40/keys')
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    // Sort results by id in descending order, take two
+    // and return the age as an integer.
+
+    $client = new GuzzleHttp\Client();
+
+    $response = $client->get('https://sheetdb.io/api/v1/58f61be4dda40/keys');
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    [
+        "id",
+        "name",
+        "age",
+        "comment"
+    ]
+    ```
+
+  </Col>
+</Row>
+
+## Document name {{ tag: 'GET', label: '/api/v1/{API_ID}/name' }}
+
+<Row>
+  <Col>
+    Returns the name of the document.
+  </Col>
+  <Col>
+    ```json {{ title: 'JSON Response' }}
+    {
+        "name": "SheetDB test document"
+    }
+    ```
+  </Col>
+</Row>
+
+## Count {{ tag: 'GET', label: '/api/v1/{API_ID}/count' }}
+
+<Row>
+  <Col>
+    Returns the number of rows in the document (without first row).
+  </Col>
+  <Col>
+    ```json {{ title: 'JSON Response' }}
+    {
+        "rows": 5
+    }
+    ```
+  </Col>
+</Row>
