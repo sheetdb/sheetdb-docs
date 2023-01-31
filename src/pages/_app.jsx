@@ -31,6 +31,7 @@ export default function App({ Component, pageProps }) {
           <title>{`${pageProps.title} - SheetDB API documentation`}</title>
         )}
         <meta name="description" content={pageProps.description} />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
       </Head>
       <MDXProvider components={mdxComponents}>
         <Layout {...pageProps}>
@@ -38,6 +39,8 @@ export default function App({ Component, pageProps }) {
           <Analytics />
         </Layout>
       </MDXProvider>
+      {/* <script async src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script> */}
+      <script defer src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
     </>
   )
 }
