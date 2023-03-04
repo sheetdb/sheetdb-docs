@@ -197,7 +197,7 @@ export const navigation = [
     ],
   },
   {
-    title: 'SheetDB API',
+    title: 'Spreadsheet API',
     links: [
       { title: 'Read', href: '/sheetdb-api/read' },
       { title: 'Search', href: '/sheetdb-api/search' },
@@ -205,6 +205,14 @@ export const navigation = [
       { title: 'Update', href: '/sheetdb-api/update' },
       { title: 'Delete', href: '/sheetdb-api/delete' },
       { title: 'Orther', href: '/sheetdb-api/other' },
+    ]
+  },
+  {
+    title: 'Global API methods',
+    links: [
+      { title: 'Authentication', href: '/global-api/authentication' },
+      { title: 'Get all APIs', href: '/global-api/get-all-apis' },
+      { title: 'Create new API', href: '/global-api/create-new-api' },
     ]
   },
   {

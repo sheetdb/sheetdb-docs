@@ -1,0 +1,31 @@
+export const description =
+  'This section describes create (POST) requests to SheetDB API'
+
+# Authentication
+
+<Note>
+    Global endpoints works only in some plans, more in our [pricing](https://sheetdb.io/pricing).
+</Note>
+
+## How to use global endpoitns
+
+To use SheetDB's global endpoints, you have to authenticate yourself using API key.
+
+You can create an API key here: [https://sheetdb.io/app/api-keys](https://sheetdb.io/app/api-keys). API keys are used to identify and authorize you when you make a request to SheetDB's API.
+
+SheetDB allows you to create API keys with different permissions depending on your needs. We recommend that you grant as little permission as necessary to your API keys to minimize the risk of unauthorized access to your data.
+
+Once you have created an API key with the required permissions, you can include it in your HTTP requests. To include the API key in the URL, you can use the following format:
+
+`https://sheetdb.io/api/v1/{APP_ID}/{APP_KEY}`
+
+Replace `{APP_ID}` with the unique identifier for your SheetDB application, and `{APP_KEY}` with your API key. You can find your application's unique identifier in the URL of your SheetDB dashboard when you are logged in.
+
+Including the API key in the URL as a query parameter is a convenient way to authenticate yourself when making requests to SheetDB's global endpoints. However, be careful not to share your API key with others, as anyone with your API key can access your data.
+
+
+
+
+
+
+Once you have created an API key with the required permissions, you can include it in your HTTP requests to SheetDB's global endpoints. You can include the API key in the HTTP request header or as a query parameter, depending on your preference.

@@ -1,0 +1,207 @@
+export const description =
+  'This section describes create (POST) requests to SheetDB API'
+
+# Create new API {{ tag: 'POST', label: '/api/v1/{APP_ID}/{APP_KEY}' }}
+
+<br />
+
+## Create API {{ tag: 'POST', label: '/api/v1/{APP_ID}/{APP_KEY}/create' }}
+
+<Row>
+  <Col>
+    Creates row(s) in the spreadsheet. Your request should contain a `data` attribute - it should be an array of rows. The keys inside the object should be the column names, and the values will be filled in the spreadsheet. The rows will be added at the end of the sheet.
+
+    You can use `INCREMENT` value. SheetDB will look for the biggest number in the given column and increase by 1.
+
+    If for some reason you can't put your data in the `data` attribute, SheetDB will try to use the entire request data to match the spreadsheet columns.
+
+    API will return the number of created rows with status code `201 Created`.
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="data" type="json">
+            An array with the rows you want to append.<br />
+            Example: `[{'id': 4,'name': "Mark"},{'id': 5,'name': "Susan"}]`
+        </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+        <Property name="return_values" type="boolean">
+            If this attribute has a value of true in the response you will receive freshly created rows.
+        </Property>
+        <Property name="mode" type="string">
+            Value Input Option, [more info here](/value-render-input-option#value-input-option).
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+
+    <CodeGroup title="Request" tag="POST" label="/api/v1/{API_ID}">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X POST -G https://sheetdb.io/api/v1/58f61be4dda40 \
+      -d id='INCREMENT' \
+      -d name=Mark \
+      -d age=18
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            data: [
+                {
+                    'id': "INCREMENT",
+                    'name': "Mark",
+                    'age': 18
+                }
+            ]
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        'data' => [
+            'id' => "INCREMENT",
+            'name' => 'Mark',
+            'age' => 18
+        ]
+    ];
+
+    $response = $client->post('https://sheetdb.io/api/v1/58f61be4dda40', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        created: 1
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+## Create API with JSON {{ tag: 'POST', label: '/api/v1/{APP_ID}/{APP_KEY}/create' }}
+
+<Row>
+  <Col>
+    Creates row(s) in the spreadsheet. Your request should contain a `data` attribute - it should be an array of rows. The keys inside the object should be the column names, and the values will be filled in the spreadsheet. The rows will be added at the end of the sheet.
+
+    You can use `INCREMENT` value. SheetDB will look for the biggest number in the given column and increase by 1.
+
+    If for some reason you can't put your data in the `data` attribute, SheetDB will try to use the entire request data to match the spreadsheet columns.
+
+    API will return the number of created rows with status code `201 Created`.
+
+    ### Required attributes
+
+    <Properties>
+        <Property name="data" type="json">
+            An array with the rows you want to append.<br />
+            Example: `[{'id': 4,'name': "Mark"},{'id': 5,'name': "Susan"}]`
+        </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="sheet" type="string">
+            The sheet (tab) you want to select.
+        </Property>
+        <Property name="return_values" type="boolean">
+            If this attribute has a value of true in the response you will receive freshly created rows.
+        </Property>
+        <Property name="mode" type="string">
+            Value Input Option, [more info here](/value-render-input-option#value-input-option).
+        </Property>
+    </Properties>
+  </Col>
+  <Col>
+
+    <CodeGroup title="Request" tag="POST" label="/api/v1/{API_ID}">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X POST -G https://sheetdb.io/api/v1/58f61be4dda40 \
+      -d id='INCREMENT' \
+      -d name=Mark \
+      -d age=18
+    ```
+
+    ```js
+    fetch('https://sheetdb.io/api/v1/58f61be4dda40', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            data: [
+                {
+                    'id': "INCREMENT",
+                    'name': "Mark",
+                    'age': 18
+                }
+            ]
+        })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    ```
+
+    ```php
+    $client = new GuzzleHttp\Client([
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $data = [
+        'data' => [
+            'id' => "INCREMENT",
+            'name' => 'Mark',
+            'age' => 18
+        ]
+    ];
+
+    $response = $client->post('https://sheetdb.io/api/v1/58f61be4dda40', [
+        'body' => json_encode($data),
+    ]);
+
+    $response->getBody()->getContents();
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        created: 1
+    }
+    ```
+
+  </Col>
+</Row>
