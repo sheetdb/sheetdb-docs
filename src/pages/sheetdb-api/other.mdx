@@ -49,7 +49,7 @@ This section describes the other methods of the SheetDB API. {{ className: 'lead
     <Properties>
         <Property name="json" type="json">
             Should contain the json array you want to import.<br />
-            Example: `[{"id": 4,"name": "Mark"},{"id": 5,"name": "Susan"}]`
+            Example: `[{"id": 1,"name": "Mark"},{"id": 2,"name": "Susan"}]`
         </Property>
     </Properties>
 
@@ -67,7 +67,7 @@ This section describes the other methods of the SheetDB API. {{ className: 'lead
     ```bash {{ title: 'cURL' }}
     curl -X POST -H "Content-Type: application/json" \
         https://sheetdb.io/api/v1/58f61be4dda40/import/json \
-        -d '{"json":[{"id": 4,"name": "Mark"},{"id": 5,"name": "Susan"}]}'
+        -d '{"json":[{"id": 1,"name": "Mark"},{"id": 2,"name": "Susan"}]}'
     ```
 
     ```js
@@ -80,11 +80,11 @@ This section describes the other methods of the SheetDB API. {{ className: 'lead
         body: JSON.stringify({
             json: [
                 {
-                    "id": 4,
+                    "id": 1,
                     "name": "Mark"
                 },
                 {
-                    "id": 5,
+                    "id": 2,
                     "name": "Susan"
                 }
             ]
@@ -104,11 +104,11 @@ This section describes the other methods of the SheetDB API. {{ className: 'lead
     $data = [
         'json' => [
             [
-                "id" => 4,
+                "id" => 1,
                 "name" => "Mark"
             ],
             [
-                "id" => 5,
+                "id" => 2,
                 "name" => "Susan"
             ]
         ]

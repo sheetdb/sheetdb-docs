@@ -13,6 +13,10 @@ export const description =
 
     You can use `INCREMENT` value. SheetDB will look for the biggest number in the given column and increase by 1.
 
+    You can use the `TIMESTAMP` value to use the current timestamp (in unix time).
+
+    You can use the `DATETIME` value to use the current date<br /> Format: *2016-06-23 09:07:21*.
+
     If for some reason you can't put your data in the `data` attribute, SheetDB will try to use the entire request data to match the spreadsheet columns.
 
     API will return the number of created rows with status code `201 Created`.
