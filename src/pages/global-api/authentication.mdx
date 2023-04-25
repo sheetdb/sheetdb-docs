@@ -1,5 +1,5 @@
 export const description =
-  'This section describes create (POST) requests to SheetDB API'
+  'Access SheetDB global endpoints by authenticating with an API key, ensuring data security.'
 
 # Authentication
 
@@ -15,8 +15,10 @@ You can create an API key here: [https://sheetdb.io/app/api-keys](https://sheetd
 
 Once you have created an API key with the required permissions, you can include it in your HTTP requests. To include the API key in the URL, you can use the following format:
 
-`https://sheetdb.test/api/v1/global/{API_KEY}/list`
+`https://sheetdb.io/api/v1/{APP_ID}/{API_KEY}/list`
 
-Replace `{APP_KEY}` with your API key. In addition, each request **must include your secret** in the body of the request.
+Replace `{APP_ID}` and `{API_KEY}` with your APP ID and API key.
 
-Including the API key in the URL is a convenient way to authenticate yourself when making requests to SheetDB's global endpoints. However, be careful not to share your API key with others, as anyone with your API key can access your data.
+<Note>
+    Including the API key in the URL is a convenient way to authenticate yourself when making requests to SheetDB's global endpoints. However, **be careful not to share your API key with others**, as anyone with your API key can access your data.
+</Note>
