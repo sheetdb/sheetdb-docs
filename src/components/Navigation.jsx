@@ -204,7 +204,7 @@ export const navigation = [
       { title: 'Create', href: '/sheetdb-api/create' },
       { title: 'Update', href: '/sheetdb-api/update' },
       { title: 'Delete', href: '/sheetdb-api/delete' },
-      { title: 'Orther', href: '/sheetdb-api/other' },
+      { title: 'Other', href: '/sheetdb-api/other' },
     ]
   },
   {
