@@ -189,6 +189,7 @@ export const navigation = [
     links: [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
+      { title: 'What is a request', href: '/what-is-a-request' },
       { title: 'Authentication', href: '/authentication' },
       { title: 'Permissions', href: '/permissions' },
       { title: 'Multiple sheets', href: '/multiple-sheets' },
