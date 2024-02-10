@@ -72,6 +72,9 @@ Using a snippet comes down to two simple steps.
             <Property name="data-sheetdb-not-found-message" type="string">
                 You can set the message to be displayed if no result is found, e.g. in query string or regular search.
             </Property>
+            <Property name="lazy-loading" type="bool">
+                If you add this attribute, the api call will be executed only when the user reaches the point of the table. If your table is lower on the page this can help reduce request consumption.
+            </Property>
         </Properties>
     </Col>
     <Col sticky>
