@@ -1,0 +1,27 @@
+export const description =
+  'This section describes delete method of global API.'
+
+# Delete API {{ tag: 'DELETE', label: '/api/v1/{APP_ID}/{API_KEY}/delete/{API_ID}' }}
+
+<br />
+
+## Delete API {{ tag: 'DELETE', label: '/api/v1/{APP_ID}/{API_KEY}/delete/{API_ID}' }}
+
+<Row>
+  <Col>
+    This method allows you to delete an API.
+
+    <Note>
+        This endpoint will remove the API within SheetDB, and will not affect or delete the Google Spreadsheet itself.
+    </Note>
+  </Col>
+  <Col>
+
+    ```json {{ title: 'JSON Response' }}
+    {
+        "deleted": 1
+    }
+    ```
+
+  </Col>
+</Row>

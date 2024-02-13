@@ -214,6 +214,7 @@ export const navigation = [
       { title: 'Authentication', href: '/global-api/authentication' },
       { title: 'Get all APIs', href: '/global-api/get-all-apis' },
       { title: 'Create new API', href: '/global-api/create-new-api' },
+      { title: 'Delete API', href: '/global-api/delete-api' },
     ]
   },
   {
