@@ -195,6 +195,7 @@ export const navigation = [
       { title: 'Multiple sheets', href: '/multiple-sheets' },
       { title: 'Value Render / Input Option', href: '/value-render-input-option' },
       { title: 'Errors', href: '/errors' },
+      { title: 'Maximum Request Body Size', href: '/maximum-request-body-size' },
     ],
   },
   {

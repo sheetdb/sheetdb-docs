@@ -1,0 +1,14 @@
+export const description =
+  'In this guide, we will discuss the maximum request body size allowed when working with the SheetDB API.'
+
+# Maximum Request Body Size
+
+In this guide, we will discuss the maximum request body size allowed when working with the SheetDB API. Understanding this limitation is crucial for ensuring your requests are processed successfully. {{ className: 'lead' }}
+
+The maximum request body size that can be sent to SheetDB is **8 MB**. This means the total size of the data sent in a single HTTP request, including headers and content, must not exceed this limit. {{ className: 'lead' }}
+
+---
+
+## Chunk Large Data
+
+If you need to send large datasets, consider breaking them into smaller chunks and sending multiple requests, ensuring each request stays within the 8 MB limit. {{ className: 'lead' }}
