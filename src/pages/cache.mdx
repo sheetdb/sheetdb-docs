@@ -3,6 +3,13 @@ export const description =
 
 # Cache
 
-By default, SheetDB cache your API data for 15 seconds. You can change this period in API settings. Cached data guarantees the fastest response time and bypassing Google's request limits. {{ className: 'lead' }}
+SheetDB provides a caching mechanism to optimize the performance of your API requests. By default, API data is cached for 15 seconds, but this period can be adjusted in the API settings based on your needs. Caching ensures the fastest possible response times and helps bypass Google's request limits, which are: {{ className: 'lead' }}
 
-When the cache is enabled, changes to the spreadsheet are not reflected until the cache expires or until changes are made to the spreadsheet using the SheetDB API. In the API settings under the cache tab, you can see what is in the cache and you can request to load or refresh the cache. {{ className: 'lead' }}
+- 500 requests per 100 seconds per project {{ className: 'lead' }}
+- 100 requests per 100 seconds per user {{ className: 'lead' }}
+
+When caching is enabled, any changes made directly in Google Sheets will not be reflected in the API responses until the cache expires. However, if changes are made through the SheetDB API, such as with a POST request, the cache will be automatically cleared, allowing the new data to be returned immediately in subsequent GET requests. {{ className: 'lead' }}
+
+In the API settings under the cache tab, you can view the current cached data and manually refresh or purge the cache if necessary. This can be useful for ensuring that your API always serves the most up-to-date information. Additionally, you can bypass the cache for specific requests by adding the <code>ignore_cache=1</code> parameter to your endpoint URL, although this may increase response times slightly. {{ className: 'lead' }}
+
+By leveraging SheetDB's caching feature, you can significantly enhance the efficiency and reliability of your API integrations. {{ className: 'lead' }}
