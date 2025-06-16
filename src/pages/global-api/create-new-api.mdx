@@ -18,6 +18,24 @@ export const description =
             A string containing the URL of the Google Spreadsheet for which the new API will be created.
         </Property>
     </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+        <Property name="permissions" type="string">
+            A comma-separated list of permissions to enable for the API. If not provided, the following permissions are enabled by default: create, read, update, delete, search. Available permissions:
+
+            - create: allows creating new rows
+            - read: allows reading existing rows
+            - update: allows updating existing rows
+            - delete: allows deleting existing rows
+            - search: allows searching for rows
+            - tabs_create: allows creating new tabs
+            - tabs_delete: allows deleting existing tabs
+
+            Example: "create,tabs_create" will only allow creating new rows and tabs.
+        </Property>
+    </Properties>
   </Col>
   <Col>
 
@@ -52,5 +70,18 @@ This endpoint creates a new API in SheetDB based on provided JSON data. The API 
 <Properties>
     <Property name="title" type="string">
         A string representing the desired name for both the API and the associated Google Spreadsheet.
+    </Property>
+    <Property name="permissions" type="string">
+        A comma-separated list of permissions to enable for the API. If not provided, the following permissions are enabled by default: create, read, update, delete, search. Available permissions:
+        
+        - create: allows creating new rows
+        - read: allows reading existing rows
+        - update: allows updating existing rows
+        - delete: allows deleting existing rows
+        - search: allows searching for rows
+        - tabs_create: allows creating new tabs
+        - tabs_delete: allows deleting existing tabs
+        
+        Example: "create,tabs_create" will only allow creating new rows and tabs.
     </Property>
 </Properties>
