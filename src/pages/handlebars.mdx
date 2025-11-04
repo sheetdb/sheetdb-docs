@@ -38,6 +38,26 @@ Using a snippet comes down to two simple steps.
      If you are using Vue.js, you have to use `v-pre` attribute on elements that contain our snippets.
 </Note>
 
+## HTML rendering and safety
+
+- Using `{{name}}` renders plain text only. Any HTML from the spreadsheet cell is escaped and will not be executed or rendered.
+- Using `{{html:name}}` allows most safe HTML tags to render (e.g. `a`, `p`, `ul`, `li`, `strong`, `em`, `img` with safe attributes). Potentially dangerous tags and attributes (e.g. `<script>`, `<iframe>`, `<object>`, `<embed>`, inline `on*` event handlers, and `javascript:` URLs) are stripped/sanitized.
+
+```html {{ title: 'HTML rendering examples' }}
+<!-- Spreadsheet cell value in column 'name': <strong>Hello</strong> <em>world</em> -->
+<div data-sheetdb-url="https://sheetdb.io/api/v1/i1b3kgwem6gou">
+    <p>Plain text (escaped): {{name}}</p>
+    <p>Sanitized HTML: {{html:name}}</p>
+    <!-- The first line will show literal tags; the second will render <strong> and <em> safely. -->
+</div>
+```
+
+This behavior is intentional for security reasons to prevent XSS and code injection from spreadsheet content when using the Handlebars snippet/library in the browser.
+
+<Note>
+    <strong>Security recommendation:</strong> For best security, configure your SheetDB API as read-only for use with the Handlebars library: enable only <code>GET</code> and disable <code>POST</code>, <code>PATCH</code>, and <code>DELETE</code>. This prevents anyone from modifying your data via exposed API keys or URLs.
+</Note>
+
 ## Optional attributes
 
 <Row>
