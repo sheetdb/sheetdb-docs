@@ -9,31 +9,31 @@ export const description =
 
 If you use our API via HTTP requests, you do not need to install anything. However, if you want, you can use one of our ready-made solutions: {{ className: 'lead' }}
 
-* **HTML** - you can use SheetDB with pure HTML, go to the [handlebars library](/handlebars) section
-* **WordPress** - [WordPress plugin](https://wordpress.org/plugins/sheetdb/)
-* **PHP** - [composer library](https://github.com/sheetdb/sheetdb-php)
-* **JavaScript** - [npm package](https://github.com/sheetdb/sheetdb-js)
-* **Node.js** - [npm package](https://github.com/sheetdb/sheetdb-node)
+- **HTML** - you can use SheetDB with pure HTML, go to the [handlebars library](/handlebars) section
+- **WordPress** - [WordPress plugin](https://wordpress.org/plugins/sheetdb/)
+- **PHP** - [composer library](https://github.com/sheetdb/sheetdb-php)
+- **JavaScript** - [npm package](https://github.com/sheetdb/sheetdb-js)
+- **Node.js** - [npm package](https://github.com/sheetdb/sheetdb-node)
 
 ## Example spreadsheet
 
 To make it convenient for you to explore this documentation, you can use our test API. As mentioned earlier in the first row there should be column names, for this API they are `id`, `name`, `age` and `comment`.
 
-<Note>
-    You can modify the test API - it resets every fifteen minutes.
-</Note>
+<Note>You can modify the test API - it resets every fifteen minutes.</Note>
 
-Here is a link to the Google spreadsheet: [SheetDB test document](https://docs.google.com/spreadsheets/d/1mrsgBk4IAdSs8Ask5H1z3bWYDlPTKplDIU_FzyktrGk/edit#gid=0)<br />
+Here is a link to the Google spreadsheet: [SheetDB test document](https://docs.google.com/spreadsheets/d/1YiMOrIFnMaksK032-zv6Sch2tTVTRhEpsFom_5qSLXM/edit#gid=0)<br />
 Our test API ID is `58f61be4dda40` and the endpoint URL is: [https://sheetdb.io/api/v1/58f61be4dda40](https://sheetdb.io/api/v1/58f61be4dda40)
 
 <Note>
-    We do not share this spreadsheet. You have permissions to read it and you can modify it using the API. If you want to play with the spreadsheet itself create your own API. The first 500 requests each month are free!
+  We do not share this spreadsheet. You have permissions to read it and you can
+  modify it using the API. If you want to play with the spreadsheet itself
+  create your own API. The first 500 requests each month are free!
 </Note>
 
 <Image
-    src={testSpreadsheet}
-    alt="SheetDB test spreadsheet document"
-    className="object-contain object-left w-full md:w-[600px]"
+  src={testSpreadsheet}
+  alt="SheetDB test spreadsheet document"
+  className="w-full object-contain object-left md:w-[600px]"
 />
 
 ## Making your first API request
@@ -49,7 +49,7 @@ curl https://sheetdb.io/api/v1/58f61be4dda40
 ```js
 fetch('https://sheetdb.io/api/v1/58f61be4dda40')
   .then((response) => response.json())
-  .then((data) => console.log(data));
+  .then((data) => console.log(data))
 ```
 
 ```php
@@ -64,36 +64,36 @@ $response->getBody()->getContents();
 
 ```json {{ title: 'JSON Response' }}
 [
-    {
-        "id": "1",
-        "name": "Tom",
-        "age": "15",
-        "comment": ""
-    },
-    {
-        "id": "2",
-        "name": "Alex",
-        "age": "24",
-        "comment": ""
-    },
-    {
-        "id": "3",
-        "name": "John",
-        "age": "51",
-        "comment": ""
-    },
-    {
-        "id": "4",
-        "name": "Steve",
-        "age": "22",
-        "comment": "special"
-    },
-    {
-        "id": "5",
-        "name": "James",
-        "age": "19",
-        "comment": ""
-    }
+  {
+    "id": "1",
+    "name": "Tom",
+    "age": "15",
+    "comment": ""
+  },
+  {
+    "id": "2",
+    "name": "Alex",
+    "age": "24",
+    "comment": ""
+  },
+  {
+    "id": "3",
+    "name": "John",
+    "age": "51",
+    "comment": ""
+  },
+  {
+    "id": "4",
+    "name": "Steve",
+    "age": "22",
+    "comment": "special"
+  },
+  {
+    "id": "5",
+    "name": "James",
+    "age": "19",
+    "comment": ""
+  }
 ]
 ```
 
