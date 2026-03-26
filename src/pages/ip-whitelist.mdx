@@ -1,0 +1,61 @@
+export const description =
+  'Learn how to use IP Whitelist in SheetDB to restrict API access to specific IP addresses.'
+
+# IP Whitelist
+
+IP Whitelist allows you to restrict access to your API so that only requests from specific IP addresses are accepted. All other requests will be rejected with a `403 Forbidden` error. {{ className: 'lead' }}
+
+---
+
+## How it works
+
+When IP Whitelist is enabled, SheetDB checks the IP address of every incoming request. If the IP is on your whitelist, the request is processed normally. If it's not, the request is rejected immediately — no data is returned.
+
+This works at the network level, which means it applies to **all requests** — from browsers, servers, scripts, mobile apps, and everything else. Unlike [CORS](/cors), IP Whitelist cannot be bypassed.
+
+## How to enable
+
+1. Go to the **Settings** tab of your API.
+2. Enable the **IP restriction** toggle.
+3. Enter the allowed IP addresses, one per line, for example:
+
+```
+203.0.113.10
+198.51.100.25
+```
+
+Both IPv4 and IPv6 addresses are supported.
+
+## When to use IP Whitelist
+
+- **Your server calls SheetDB** and you know its IP address. This is the most common use case — you run a backend service with a fixed IP and want to make sure only your server can access the data.
+- **You want hard protection** — unlike CORS, IP Whitelist physically blocks unauthorized requests. The data is never sent to unauthorized IPs.
+
+## When NOT to use IP Whitelist
+
+<Note>
+  Do not use IP Whitelist to restrict access from web browsers. Browsers make requests from the user's IP address, which is different for every user and changes frequently. You cannot predict or whitelist all your users' IPs. Use [CORS](/cors) instead to control browser access.
+</Note>
+
+- **Your API is called from a website visited by end users** — each user has a different IP address. Use [CORS](/cors) and/or [authentication](/authentication) instead.
+- **You use a hosting provider with dynamic IPs** — if your server's IP changes (e.g. serverless functions, some cloud providers), IP Whitelist may lock you out. Check if your provider offers a static outbound IP.
+
+## Combining with other security features
+
+For maximum protection, combine IP Whitelist with other security features:
+
+- **IP Whitelist + [Authentication](/authentication)** — even if someone spoofs or shares the whitelisted IP, they still need a valid token.
+- **IP Whitelist + [Permissions](/permissions)** — limit what the whitelisted IPs can do (e.g. only read, no delete).
+- **[CORS](/cors) + IP Whitelist** — CORS protects the browser side, IP Whitelist protects the server side. Together they cover both scenarios.
+
+## Error response
+
+If a request comes from an IP that is not on the whitelist, SheetDB returns:
+
+```json
+{
+  "error": "Your IP address is not allowed to access this API."
+}
+```
+
+with HTTP status code `403`.

@@ -1,0 +1,61 @@
+export const description =
+  'Learn how CORS (Cross-Origin Resource Sharing) works in SheetDB. Restrict which websites can access your API from the browser.'
+
+# CORS (Cross-Origin Resource Sharing)
+
+CORS allows you to control which websites can make requests to your API from the browser. By default, any website can call your SheetDB API. If you want to limit browser access to specific domains, you can enable CORS restrictions in the settings tab of your API. {{ className: 'lead' }}
+
+---
+
+## What is CORS?
+
+When a user visits a website (e.g. `https://mysite.com`) and that website tries to fetch data from SheetDB, the browser checks whether SheetDB allows requests from `mysite.com`. This check is called CORS.
+
+- If you **don't** set any CORS restrictions, SheetDB responds with `Access-Control-Allow-Origin: *`, which means **any website** can make requests to your API from the browser.
+- If you **do** set CORS restrictions, SheetDB will only allow requests from the domains you specify.
+
+## How to enable
+
+1. Go to the **Settings** tab of your API.
+2. Enable the **CORS restriction** toggle.
+3. Enter the allowed origins, one per line, for example:
+
+```
+https://mysite.com
+https://app.mysite.com
+```
+
+Each origin must include the protocol (`https://` or `http://`), for example `https://mysite.com`. Do not add a trailing slash or a path — just the domain.
+
+## Wildcard subdomains
+
+If you want to allow all subdomains of a domain, you can use the `*` wildcard:
+
+```
+*.mysite.com
+```
+
+This will allow `https://app.mysite.com`, `https://dashboard.mysite.com`, and any other subdomain.
+
+## What CORS does NOT do {{ anchor: false }}
+
+<Note>
+  CORS is a **browser-only** mechanism. It does not protect your API from being accessed by servers, scripts, mobile apps, Postman, cURL, or anything that is not a web browser. If someone copies your API URL, they can still call it from their server or terminal regardless of your CORS settings.
+</Note>
+
+Think of CORS as a lock on the front door that only works for one type of visitor. It tells browsers: "only allow requests from these websites." But anyone who is not a browser simply ignores this rule.
+
+**If you need to restrict access beyond the browser**, use one of these methods:
+- [Authentication](/authentication) — require a token or password for every request.
+- [IP Whitelist](/ip-whitelist) — allow only specific IP addresses (useful for server-to-server communication).
+- [Permissions](/permissions) — limit which operations (read, write, delete) are allowed.
+
+## When to use CORS
+
+- **You have a public website** that calls SheetDB and you want to make sure other websites cannot use your API endpoint from their frontend code.
+- **You are building a web application** and want to add a layer of protection against someone embedding your API URL in their own site.
+
+## When NOT to use CORS
+
+- **You want to fully protect your API** — CORS alone is not enough. Combine it with [authentication](/authentication) and [permissions](/permissions).
+- **You are calling the API from a server** (e.g. PHP, Node.js, Python) — CORS does not apply to server-to-server requests. Use [IP Whitelist](/ip-whitelist) or [authentication](/authentication) instead.

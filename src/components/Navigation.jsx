@@ -192,6 +192,8 @@ export const navigation = [
       { title: 'What is a request', href: '/what-is-a-request' },
       { title: 'Authentication', href: '/authentication' },
       { title: 'Permissions', href: '/permissions' },
+      { title: 'CORS', href: '/cors' },
+      { title: 'IP Whitelist', href: '/ip-whitelist' },
       { title: 'Multiple sheets', href: '/multiple-sheets' },
       { title: 'Value Render / Input Option', href: '/value-render-input-option' },
       { title: 'Errors', href: '/errors' },
