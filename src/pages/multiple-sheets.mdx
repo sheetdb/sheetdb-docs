@@ -5,7 +5,15 @@ export const description =
 
 By default, the first sheet is selected, however, if you want to select another one, add the `sheet` attribute and specify the sheet name. {{ className: 'lead' }}
 
-When the sheet is not found, you will receive a 404 error.
+When the sheet is not found, you will receive a 404 error with the following JSON response. This applies to all read endpoints (`GET /api/v1/{API_ID}`, `/search`, `/search_or`, `/count` and `/csv`) as well as to deleting rows with `DELETE /api/v1/{API_ID}/{column}/{value}`, which does not modify any data in that case. The `/csv` endpoint also returns this JSON error instead of a CSV file.
+
+```json
+{
+    "error": "Sheet not found."
+}
+```
+
+Deleting a sheet (tab) that does not exist with `DELETE /api/v1/{API_ID}/sheet` returns a 400 error instead, see [Delete a sheet](/sheetdb-api/other#delete-a-sheet).
 
 Here are some examples:
 

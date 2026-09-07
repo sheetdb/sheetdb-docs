@@ -184,6 +184,27 @@ export const description =
 <Row>
   <Col>
     Returns the number of rows in the document (without first row).
+
+    The rows are counted from the same [cache](/cache) that the [Get content](#get-content) endpoint is served from, so the result may be out of date for up to the cache lifetime: the time set in your API settings when the cache is enabled, or 15 seconds when the cache is disabled.
+
+    Changes made through the SheetDB API (POST, PATCH, PUT, DELETE) clear the cache, so the next `/count` request returns a fresh value. Changes made directly in Google Sheets do not clear the cache and will be reflected only after it expires.
+
+    If you need a live count, add the `ignore_cache=1` parameter, example: [https://sheetdb.io/api/v1/58f61be4dda40/count?ignore_cache=1](https://sheetdb.io/api/v1/58f61be4dda40/count?ignore_cache=1). This request also refreshes the cache used by the [Get content](#get-content) endpoint.
+
+    The `mode` attribute has no effect on this endpoint. The rows are always counted from the data in the default `FORMATTED_VALUE` mode.
+
+    If the `sheet` attribute points to a sheet (tab) that does not exist, you will receive a 404 error with `{"error": "Sheet not found."}`.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="sheet" type="string">
+        The sheet (tab) you want to select.
+      </Property>
+      <Property name="ignore_cache" type="boolean">
+        Set to `1` to bypass the cache and count the rows directly from Google Sheets.
+      </Property>
+    </Properties>
   </Col>
   <Col>
     ```json {{ title: 'JSON Response' }}

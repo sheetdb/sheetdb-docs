@@ -10,6 +10,8 @@ SheetDB provides a caching mechanism to optimize the performance of your API req
 
 When caching is enabled, any changes made directly in Google Sheets will not be reflected in the API responses until the cache expires. However, if changes are made through the SheetDB API, such as with a POST request, the cache will be automatically cleared, allowing the new data to be returned immediately in subsequent GET requests. {{ className: 'lead' }}
 
+The same cache is shared by all read endpoints: `GET /api/v1/{API_ID}`, `/search`, `/search_or`, `/count` and `/csv`. The first request after the cache expires fetches the data from Google, while other concurrent requests wait for that result instead of querying Google separately. The <code>ignore_cache=1</code> parameter works on each of these endpoints. {{ className: 'lead' }}
+
 In the API settings under the cache tab, you can view the current cached data and manually refresh or purge the cache if necessary. This can be useful for ensuring that your API always serves the most up-to-date information. Additionally, you can bypass the cache for specific requests by adding the <code>ignore_cache=1</code> parameter to your endpoint URL, although this may increase response times slightly. {{ className: 'lead' }}
 
 By leveraging SheetDB's caching feature, you can significantly enhance the efficiency and reliability of your API integrations. {{ className: 'lead' }}
