@@ -13,6 +13,10 @@ export const description =
 
     Returns count of updated rows.
 
+    The `{VALUE}` part of the URL accepts the same syntax as the [search](/sheetdb-api/search) endpoint: wildcards (`*`), negation (`!`), relational operators (`<`, `>`, `<=`, `>=`) and the `casesensitive` attribute. For example, `PATCH /api/v1/{API_ID}/name/J*` updates every row whose name starts with "J". Wildcards work here regardless of the READ permission.
+
+    If no row matches, you will receive a 404 error with `{"error": "No results found"}`. If the column does not exist, you will receive a 404 error with `{"error": "Undefined column: {COLUMN_NAME}"}`.
+
     ### Required attributes
 
     <Properties>
@@ -32,6 +36,10 @@ export const description =
 
         <Property name="mode" type="string">
             Value Input Option, [more info here](/value-render-input-option#value-input-option).
+        </Property>
+
+        <Property name="casesensitive" type="boolean">
+            By default, matching is not case-sensitive. Set this attribute to `true` to make it case-sensitive.
         </Property>
     </Properties>
   </Col>
@@ -107,6 +115,8 @@ export const description =
     All queries will be updated as in a regular PATCH update.
 
     It returns the number of updated rows.
+
+    The `query` value accepts the same syntax as the single update, including wildcards, negation and relational operators. Unknown columns return a 404 error with `{"error": "Undefined column: {COLUMN_NAME}"}`, and `{"error": "No results found"}` is returned when no query matched any row.
 
     ### Required attributes
 

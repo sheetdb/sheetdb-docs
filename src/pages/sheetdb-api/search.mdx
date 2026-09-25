@@ -20,6 +20,8 @@ export const description =
     
     You can search using wildcards. The asterisk `*` can represent any string. Wildcard only work when READ and SEARCH permissions are **both** enabled.
 
+    If the column used in the query does not exist, you will receive a 404 error with `{"error": "Undefined column: {COLUMN_NAME}"}`. When no row matches, an empty array is returned with status 200.
+
     ## Negative search
 
     If you want to exclude certain rows from the search results, use an exclamation mark before the value. For example, if you want to get all rows without the one in which name = Tom, use this url:<br />

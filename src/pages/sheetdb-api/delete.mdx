@@ -14,6 +14,10 @@ export const description =
 
     It returns count of deleted rows.
 
+    The `{VALUE}` part of the URL accepts the same syntax as the [search](/sheetdb-api/search) endpoint: wildcards (`*`), negation (`!`), relational operators (`<`, `>`, `<=`, `>=`) and the `casesensitive` attribute. For example, `DELETE /api/v1/{API_ID}/age/>20` deletes every row with age greater than 20. Wildcards work here regardless of the READ permission.
+
+    If no row matches, you will receive a 404 error with `{"error": "No results found"}`. If the column does not exist, you will receive a 404 error with `{"error": "Undefined column: {COLUMN_NAME}"}`.
+
     If the `sheet` attribute points to a sheet (tab) that does not exist, you will receive a 404 error with `{"error": "Sheet not found."}` and no data will be modified.
 
     ### Optional attributes
@@ -21,6 +25,14 @@ export const description =
     <Properties>
         <Property name="sheet" type="string">
             The sheet (tab) you want to select.
+        </Property>
+
+        <Property name="limit" type="integer">
+            Maximum number of rows to delete. Rows are counted from the top of the sheet, so `limit=2` deletes the first two matching rows.
+        </Property>
+
+        <Property name="casesensitive" type="boolean">
+            By default, matching is not case-sensitive. Set this attribute to `true` to make it case-sensitive.
         </Property>
     </Properties>
 

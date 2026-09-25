@@ -50,7 +50,11 @@ Here is a list of the different categories of status codes returned by SheetDB. 
     Action is forbidden.
   </Property>
   <Property name="404 Not Found">
-    The server did not find anything matching the request.
+    The server did not find anything matching the request. Possible responses:
+    * `{"error": "Wrong API id"}` - the API ID in the URL does not exist.
+    * `{"error": "Sheet not found."}` - the `sheet` attribute points to a sheet (tab) that does not exist, see [Multiple sheets](/multiple-sheets).
+    * `{"error": "Undefined column: x"}` - the column used in a search, update or delete query does not exist in the first row.
+    * `{"error": "No results found"}` - an update or delete query did not match any row. Search returns an empty array with status 200 in this case.
   </Property>
   <Property name="405 Method Not Allowed">
     You are probably using the wrong method for url endpoint.
