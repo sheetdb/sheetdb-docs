@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { Button } from '@/components/Button'
@@ -6,31 +5,25 @@ import { Button } from '@/components/Button'
 const SIGNUP_URL = 'https://sheetdb.io/login'
 
 // utm_medium = where on the page the link sits, utm_content = which docs page it was clicked on
+export function buildTrackedUrl(base, medium, pathname) {
+  let url = new URL(base)
+
+  url.searchParams.set('utm_source', 'docs')
+  url.searchParams.set('utm_medium', medium)
+  url.searchParams.set('utm_campaign', 'docs_cta')
+  url.searchParams.set('utm_content', pathname)
+
+  return url.toString()
+}
+
 export function useTrackedUrl(base, medium) {
   let router = useRouter()
 
-  let params = new URLSearchParams({
-    utm_source: 'docs',
-    utm_medium: medium,
-    utm_campaign: 'docs_cta',
-    utm_content: router.pathname,
-  })
-
-  return `${base}?${params}`
+  return buildTrackedUrl(base, medium, router.pathname)
 }
 
 export function useSignupUrl(medium) {
   return useTrackedUrl(SIGNUP_URL, medium)
-}
-
-export function TrackedLink({ href, medium = 'inline', children, ...props }) {
-  let trackedHref = useTrackedUrl(href, medium)
-
-  return (
-    <Link href={trackedHref} {...props}>
-      {children}
-    </Link>
-  )
 }
 
 export function SignupButton({

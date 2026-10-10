@@ -1,12 +1,42 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import clsx from 'clsx'
 
 import { Heading } from '@/components/Heading'
+import { buildTrackedUrl } from '@/components/SignupCta'
 
-export const a = Link
 export { Button } from '@/components/Button'
 export { CodeGroup, Code as code, Pre as pre } from '@/components/Code'
-export { SignupButton, SignupCta, TrackedLink } from '@/components/SignupCta'
+export { SignupButton, SignupCta } from '@/components/SignupCta'
+
+const TRACKED_HOSTS = ['sheetdb.io', 'www.sheetdb.io']
+
+// Marketing links to sheetdb.io get UTM params; API endpoint URLs (/api/...) are
+// technical examples shown in the docs and are left untouched.
+function isTrackableHref(href) {
+  if (typeof href !== 'string') return false
+
+  let url
+  try {
+    url = new URL(href)
+  } catch {
+    return false
+  }
+
+  return TRACKED_HOSTS.includes(url.hostname) && !url.pathname.startsWith('/api/')
+}
+
+function Anchor({ href, ...props }) {
+  let router = useRouter()
+
+  let trackedHref = isTrackableHref(href)
+    ? buildTrackedUrl(href, 'inline', router.pathname)
+    : href
+
+  return <Link href={trackedHref} {...props} />
+}
+
+export { Anchor as a }
 
 export const h2 = function H2(props) {
   return <Heading level={2} {...props} />

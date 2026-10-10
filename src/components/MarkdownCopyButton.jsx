@@ -1,6 +1,25 @@
 import { useCallback, useMemo, useState } from 'react'
 import TurndownService from 'turndown'
 
+// Links in the live DOM carry UTM params (see the `a` component in mdx.jsx);
+// the copied Markdown should contain the clean URLs instead.
+function stripUtmParams(root) {
+    root.querySelectorAll('a[href]').forEach((a) => {
+        let url
+        try {
+            url = new URL(a.getAttribute('href'), location.origin)
+        } catch {
+            return
+        }
+
+        const utmKeys = [...url.searchParams.keys()].filter((key) => key.startsWith('utm_'))
+        if (utmKeys.length === 0) return
+
+        utmKeys.forEach((key) => url.searchParams.delete(key))
+        a.setAttribute('href', url.toString())
+    })
+}
+
 export function MarkdownCopyButton() {
     const [isCopying, setIsCopying] = useState(false)
     const [copied, setCopied] = useState(false)
@@ -51,6 +70,9 @@ export function MarkdownCopyButton() {
                     parent.replaceChild(document.createTextNode(a.textContent), a)
                 }
             })
+
+            // 4) Drop UTM tracking params so the copied Markdown has clean links
+            stripUtmParams(cloned)
 
             // Convert cleaned HTML → Markdown
             const html = cloned.innerHTML
