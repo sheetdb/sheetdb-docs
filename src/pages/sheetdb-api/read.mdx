@@ -1,5 +1,8 @@
+export const metaTitle =
+  'Read Google Sheets as JSON via REST API (GET rows)'
+
 export const description =
-  'This section describes read (GET) requests to SheetDB API'
+  'Get all rows of a Google Sheet as JSON with one GET request: pagination (limit, offset), sorting, choose a tab, cast numbers. cURL, JS and PHP examples.'
 
 # Read {{ tag: 'GET', label: '/api/v1/{API_ID}' }}
 
@@ -187,7 +190,7 @@ export const description =
 
     The rows are counted from the same [cache](/cache) that the [Get content](#get-content) endpoint is served from, so the result may be out of date for up to the cache lifetime: the time set in your API settings when the cache is enabled, or 15 seconds when the cache is disabled.
 
-    Changes made through the SheetDB API (POST, PATCH, PUT, DELETE) clear the cache, so the next `/count` request returns a fresh value. Changes made directly in Google Sheets do not clear the cache and will be reflected only after it expires.
+    Changes made through the SheetDB API (POST, PATCH, DELETE) clear the cache, so the next `/count` request returns a fresh value. Changes made directly in Google Sheets do not clear the cache and will be reflected only after it expires.
 
     If you need a live count, add the `ignore_cache=1` parameter, example: [https://sheetdb.io/api/v1/58f61be4dda40/count?ignore_cache=1](https://sheetdb.io/api/v1/58f61be4dda40/count?ignore_cache=1). This request also refreshes the cache used by the [Get content](#get-content) endpoint.
 

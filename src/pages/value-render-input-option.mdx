@@ -1,23 +1,101 @@
+export const metaTitle =
+  'FORMATTED_VALUE vs UNFORMATTED_VALUE vs FORMULA, RAW vs USER_ENTERED'
+
 export const description =
-  'In this guide, we will look at the rules about rendering and inserting data to Google Spreadsheet.'
+  'FORMATTED_VALUE, UNFORMATTED_VALUE and FORMULA for reads, RAW vs USER_ENTERED for writes in SheetDB: what each returns, with examples. Set it with ?mode=.'
 
-# Value options
+# Value render & input options
 
-Rendering and inserting data in Google Spreadsheets. {{ className: 'lead' }}
+How SheetDB reads values from Google Sheets and how it writes them, controlled with the `mode` parameter. {{ className: 'lead' }}
 
 ---
 
 ## Value Render Option
 
-You can add the optional `mode` parameter to your <code className="ring-1 ring-inset ring-emerald-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-emerald-400">GET</code> requests. It controls how the values should be displayed. This parameter can have the following values:
+You can add the optional `mode` parameter to your <code className="ring-1 ring-inset ring-emerald-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-emerald-400">GET</code> requests ([read](/sheetdb-api/read) and [search](/sheetdb-api/search)). It controls how cell values are returned. This parameter can have the following values:
 
-* `FORMATTED_VALUE` (default) - Values will be calculated & formatted in the reply according to the cell's formatting. Formatting is based on the spreadsheet's locale, not the requesting user's locale. For example, if A1 is 1.23 and A2 is =A1 and formatted as currency, then A2 would return "$1.23".
-* `UNFORMATTED_VALUE` - Values will be calculated, but not formatted in the reply. For example, if A1 is 1.23 and A2 is =A1 and formatted as currency, then A2 would return the number 1.23.
-* `FORMULA` - Values will not be calculated. The reply will include the formulas. For example, if A1 is 1.23 and A2 is =A1 and formatted as currency, then A2 would return "=A1".
+* `FORMATTED_VALUE` (default) - Formulas are calculated and every value is returned as text, exactly as it is displayed in the spreadsheet. Formatting follows the spreadsheet's locale, not the locale of the person making the request.
+* `UNFORMATTED_VALUE` - Formulas are calculated, but formatting is not applied. Numbers are returned as JSON numbers, and dates are returned as serial numbers (days since December 30, 1899).
+* `FORMULA` - Formulas are not calculated. Cells with a formula return the formula itself, other cells return their unformatted value.
+
+The value is not case-sensitive. An unknown value falls back to `FORMATTED_VALUE`.
+
+### Example
+
+Let's take a sheet where `price` is `1.5` formatted as currency, `total` is the formula `=B2*2` (also formatted as currency) and `date` is March 1, 2024 formatted as `M/D/YYYY`:
+
+```bash {{ title: 'Request' }}
+curl https://sheetdb.io/api/v1/58f61be4dda40?mode=FORMATTED_VALUE
+curl https://sheetdb.io/api/v1/58f61be4dda40?mode=UNFORMATTED_VALUE
+curl https://sheetdb.io/api/v1/58f61be4dda40?mode=FORMULA
+```
+
+```json {{ title: 'FORMATTED_VALUE' }}
+[
+    {
+        "id": "1",
+        "price": "$1.50",
+        "total": "$3.00",
+        "date": "3/1/2024"
+    }
+]
+```
+
+```json {{ title: 'UNFORMATTED_VALUE' }}
+[
+    {
+        "id": 1,
+        "price": 1.5,
+        "total": 3,
+        "date": 45352
+    }
+]
+```
+
+```json {{ title: 'FORMULA' }}
+[
+    {
+        "id": 1,
+        "price": 1.5,
+        "total": "=B2*2",
+        "date": 45352
+    }
+]
+```
+
+<Note>
+  `UNFORMATTED_VALUE` or `cast_numbers`? The [`cast_numbers`](/sheetdb-api/read#get-content) attribute converts the formatted text of the columns you list, so values like `"$1.50"` or `"1,234.50"` will not be converted correctly. If your numbers are formatted (currency, thousands separators, percentages), use `mode=UNFORMATTED_VALUE` instead.
+</Note>
+
+The `mode` parameter has no effect on the [count](/sheetdb-api/read#count) endpoint.
+
+---
 
 ## Value Input Option
 
-You can add an optional `mode` parameter to your <code className="ring-1 ring-inset ring-sky-300 bg-sky-400/10 text-sky-500 dark:ring-sky-400/30 dark:bg-sky-400/10 dark:text-sky-400">POST</code> and <code className="ring-1 ring-inset ring-amber-300 bg-amber-400/10 text-amber-500 dark:ring-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400">PATCH</code> requests (create and update). It controls whether the input strings are parsed and how. This parameter can have one of two values:
+You can add an optional `mode` parameter to your <code className="ring-1 ring-inset ring-sky-300 bg-sky-400/10 text-sky-500 dark:ring-sky-400/30 dark:bg-sky-400/10 dark:text-sky-400">POST</code> and <code className="ring-1 ring-inset ring-amber-300 bg-amber-400/10 text-amber-500 dark:ring-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400">PATCH</code> requests ([create](/sheetdb-api/create) and [update](/sheetdb-api/update)). It controls whether the values you send are parsed and how. This parameter can have one of two values:
 
-* `USER_ENTERED` (default) - The input is parsed exactly as if it were entered into the Google Sheets UI, so "Mar 1 2016" becomes a date, and "=1+2" becomes a formula. Formats may also be inferred, so "$100.15" becomes a number with currency formatting.
-* `RAW` - The input is not parsed and is simply inserted as a string, so the input "=1+2" places the string "=1+2" in the cell, not a formula. (Non-string values like booleans or numbers are always handled as RAW.)
+* `USER_ENTERED` (default) - Values are parsed as if you typed them into the Google Sheets UI: `"Mar 1 2024"` becomes a date, `"=1+2"` becomes a formula and `"$100.15"` becomes a number with currency formatting.
+* `RAW` - Values are not parsed and are saved as text, so `"=1+2"` is saved as the text `=1+2`, not as a formula. Numbers and booleans are always saved as they are.
+
+The value is not case-sensitive. Any value other than `RAW` is treated as `USER_ENTERED`.
+
+### Example
+
+Sending the same row in both modes:
+
+```bash {{ title: 'Request' }}
+curl -X POST https://sheetdb.io/api/v1/58f61be4dda40?mode=USER_ENTERED \
+  -H "Content-Type: application/json" \
+  -d '{"data": [{"id": "2", "total": "=1+2", "date": "Mar 1 2024"}]}'
+
+curl -X POST https://sheetdb.io/api/v1/58f61be4dda40?mode=RAW \
+  -H "Content-Type: application/json" \
+  -d '{"data": [{"id": "3", "total": "=1+2", "date": "Mar 1 2024"}]}'
+```
+
+With `USER_ENTERED` the `total` cell contains the formula `=1+2` and displays `3`, and the `date` cell contains a real date you can sort and calculate with. With `RAW` both cells contain plain text: `=1+2` and `Mar 1 2024`.
+
+<Note>
+  Use `RAW` when you save user input, so a value starting with `=` is never executed as a formula.
+</Note>

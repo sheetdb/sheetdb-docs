@@ -36,3 +36,4 @@ yarn-error.log*
 # ai agent skills
 /.agents
 /.claude
+/public/sitemap.xml
