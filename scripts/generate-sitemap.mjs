@@ -1,10 +1,11 @@
 // Writes public/sitemap.xml from the MDX pages in src/pages. Runs before `next build`.
 import { readdirSync, writeFileSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { join, relative, sep } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const SITE_URL = 'https://docs.sheetdb.io'
-const pagesDir = new URL('../src/pages', import.meta.url).pathname
-const outFile = new URL('../public/sitemap.xml', import.meta.url).pathname
+const pagesDir = fileURLToPath(new URL('../src/pages', import.meta.url))
+const outFile = fileURLToPath(new URL('../public/sitemap.xml', import.meta.url))
 
 function findPages(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -15,7 +16,7 @@ function findPages(dir) {
 }
 
 let urls = findPages(pagesDir)
-  .map((file) => '/' + relative(pagesDir, file).replace(/\.mdx$/, ''))
+  .map((file) => '/' + relative(pagesDir, file).split(sep).join('/').replace(/\.mdx$/, ''))
   .map((path) => (path === '/index' ? '' : path))
   .sort()
   .map((path) => `  <url><loc>${SITE_URL}${path}</loc></url>`)
