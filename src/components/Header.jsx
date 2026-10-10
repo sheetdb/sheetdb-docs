@@ -11,6 +11,7 @@ import {
 } from '@/components/MobileNavigation'
 import { useMobileNavigationStore } from '@/components/MobileNavigation'
 import { ModeToggle } from '@/components/ModeToggle'
+import { SignupButton } from '@/components/SignupCta'
 import { MobileSearch, Search } from '@/components/Search'
 
 function TopLevelNavItem({ href, children }) {
@@ -78,8 +79,11 @@ export const Header = forwardRef(function Header({ className }, ref) {
                     {/* <MobileSearch /> */}
                     <ModeToggle />
                 </div>
+                <div className="hidden sm:contents">
+                    <Button href="https://sheetdb.io/app" variant="outline">Dashboard</Button>
+                </div>
                 <div className="hidden min-[416px]:contents">
-                    <Button href="https://sheetdb.io/app">Dashboard</Button>
+                    <SignupButton medium="header" />
                 </div>
             </div>
         </motion.div>

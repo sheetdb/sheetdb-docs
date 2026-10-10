@@ -41,7 +41,7 @@ export function MarkdownCopyButton() {
 
             // 2) Remove other copy helpers / decorative icons if present
             cloned
-                .querySelectorAll('[data-copyable],[data-flux-icon],[data-slot="icon"]')
+                .querySelectorAll('[data-copyable],[data-flux-icon],[data-slot="icon"],[data-markdown-ignore]')
                 .forEach((el) => el.remove())
 
             // 3) Unwrap anchor links inside headings → keep pure heading text
@@ -69,7 +69,7 @@ export function MarkdownCopyButton() {
                         const cloned = article.cloneNode(true)
                         cloned.querySelectorAll('button').forEach((el) => el.remove())
                         cloned
-                            .querySelectorAll('[data-copyable],[data-flux-icon],[data-slot="icon"]')
+                            .querySelectorAll('[data-copyable],[data-flux-icon],[data-slot="icon"],[data-markdown-ignore]')
                             .forEach((el) => el.remove())
                         text = cloned.innerText || ''
                     }

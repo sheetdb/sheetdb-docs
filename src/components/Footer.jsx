@@ -5,6 +5,7 @@ import { Transition } from '@headlessui/react'
 
 import { Button } from '@/components/Button'
 import { navigation } from '@/components/Navigation'
+import { SignupCta } from '@/components/SignupCta'
 
 function CheckIcon(props) {
   return (
@@ -247,6 +248,7 @@ export function Footer() {
 
   return (
     <footer className="mx-auto max-w-2xl space-y-10 pb-16 lg:max-w-5xl">
+      <SignupCta medium="page_end" />
       <Feedback key={router.pathname} />
       <PageNavigation />
       <SmallPrint />

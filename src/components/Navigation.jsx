@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
 import { Button } from '@/components/Button'
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
+import { SignupButton } from '@/components/SignupCta'
 import { Tag } from '@/components/Tag'
 import { remToPx } from '@/lib/remToPx'
 
@@ -243,8 +244,9 @@ export function Navigation(props) {
             className={groupIndex === 0 && 'md:mt-0'}
           />
         ))}
-        <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
-          <Button href="https://sheetdb.io/app/" variant="filled" className="w-full">
+        <li className="sticky bottom-0 z-10 mt-6 flex flex-col gap-2 min-[416px]:hidden">
+          <SignupButton medium="mobile_nav" className="w-full" />
+          <Button href="https://sheetdb.io/app/" variant="outline" className="w-full">
             Sign in
           </Button>
         </li>
