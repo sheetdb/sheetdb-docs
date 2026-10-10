@@ -1,11 +1,12 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { Button } from '@/components/Button'
 
 const SIGNUP_URL = 'https://sheetdb.io/login'
 
-// utm_medium = where on the page the CTA sits, utm_content = which docs page it was clicked on
-export function useSignupUrl(medium) {
+// utm_medium = where on the page the link sits, utm_content = which docs page it was clicked on
+export function useTrackedUrl(base, medium) {
   let router = useRouter()
 
   let params = new URLSearchParams({
@@ -15,11 +16,25 @@ export function useSignupUrl(medium) {
     utm_content: router.pathname,
   })
 
-  return `${SIGNUP_URL}?${params}`
+  return `${base}?${params}`
+}
+
+export function useSignupUrl(medium) {
+  return useTrackedUrl(SIGNUP_URL, medium)
+}
+
+export function TrackedLink({ href, medium = 'inline', children, ...props }) {
+  let trackedHref = useTrackedUrl(href, medium)
+
+  return (
+    <Link href={trackedHref} {...props}>
+      {children}
+    </Link>
+  )
 }
 
 export function SignupButton({
-  medium,
+  medium = 'inline',
   variant = 'filled',
   children = 'Create free API',
   ...props
@@ -27,7 +42,7 @@ export function SignupButton({
   let href = useSignupUrl(medium)
 
   return (
-    <Button href={href} variant={variant} {...props}>
+    <Button href={href} variant={variant} data-markdown-ignore {...props}>
       {children}
     </Button>
   )
