@@ -5,14 +5,14 @@ export const description =
 
 If you reach the limit of your plan, your requests will return a `429` error. To increase your limit you can choose a higher plan or buy additional requests in the [billing tab](https://sheetdb.io/app/billing).
 
-In addition, there is a rate limit - 15 requests per 10 seconds from one IP address. If you need more please contact us. You can bypass this limit with an enterprise subscription. <u>Cache does not affect this limit.</u>
+In addition, each API has a rate limit of **90 requests per minute**. The limit applies to the whole API, not to a single IP address, so all clients calling the same API share it. Requests over the limit return a `429` error for up to a minute; the `Retry-After` header says how many seconds to wait. <u>Cache does not affect this limit.</u> Enterprise plans have higher rate limits; if you need more, please contact us.
 
 ### Google limits
 
 Google also imposes limits on spreadsheets API:
 
-* 100 requests per 100 seconds per user
-* variable limit of requests per one spreadsheet (for 100 seconds)
+* 60 read requests and 60 write requests per minute per user
+* 300 requests per minute per project
 
 Both limits cannot be changed but you can bypass them using cache. You can enable the cache in your API settings. SheetDB limit will be counted as regular.
 

@@ -60,12 +60,12 @@ Here is a list of the different categories of status codes returned by SheetDB. 
     You are probably using the wrong method for url endpoint.
   </Property>
   <Property name="429 Too Many Requests">
-    You have exceeded the request limit. Learn more about the different types of request limits in SheetDB [here](/limits).
+    You have exceeded either the request limit of your plan or the rate limit of the API (90 requests per minute, shared by all clients of that API). Learn more about both limits [here](/limits).
   </Property>
   <Property name="500 Internal Server Error">
     We had a problem. Try again later.
   </Property>
   <Property name="1015 Rate limit">
-    You are making too much requests, the limit is 15 requests per 10 seconds. Try again in a minute.
+    An error page from Cloudflare, shown when one client sends an abnormal burst of requests. Wait a minute and try again. The rate limit of the API itself returns `429`, see above.
   </Property>
 </Properties>
