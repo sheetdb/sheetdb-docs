@@ -1,0 +1,141 @@
+export const metaTitle =
+  'SheetDB MCP server: connect Claude, ChatGPT and Cursor to Google Sheets'
+
+export const description =
+  'Connect Claude, ChatGPT, Cursor or Claude Code to your Google Sheets with the SheetDB MCP server. You sign in with OAuth, choose what agents may do per API and approve deletes.'
+
+# MCP server
+
+SheetDB runs a remote **MCP server** (Model Context Protocol) that lets AI assistants such as Claude, ChatGPT, Cursor and Claude Code read and write the Google Sheets behind your APIs from a conversation. The server runs on the same code as the REST API: the same [cache](/cache), [permissions](/permissions), [rate limits](/limits) and [request counting](/what-is-a-request) apply. {{ className: 'lead' }}
+
+Setup steps for each client are on the overview page at [sheetdb.io/mcp](https://sheetdb.io/mcp).
+
+## Server URL
+
+```
+https://sheetdb.io/mcp
+```
+
+The server uses the Streamable HTTP transport and OAuth 2.1 with dynamic client registration and PKCE (scope `mcp:use`). You sign in with the Google account you use for SheetDB, so MCP needs no API key or personal token.
+
+The server answers `POST /mcp`. Opening `GET /mcp` in a browser shows the overview page. An SSE request gets `405 Allow: POST`, because SheetDB sends no server-initiated messages.
+
+On an Enterprise instance the server is at `https://{subdomain}.sheetdb.io/mcp`. Sign-in always goes through `sheetdb.io`.
+
+## Connecting a client
+
+1. Add the server URL in your client:
+   - Claude.ai and Claude Desktop: Settings → Connectors → Add custom connector.
+   - ChatGPT: Settings → Connectors → Create, authentication OAuth.
+   - Cursor: Settings → MCP → Add new MCP server.
+   - Claude Code: run the command below, then `/mcp`.
+2. Sign in with Google on the SheetDB page that opens.
+3. Approve the connection.
+
+```bash
+claude mcp add --transport http sheetdb https://sheetdb.io/mcp
+```
+
+The client appears in the panel under **AI agents** as an **Agent connection**, with its name, the date and the last use. **Revoke** signs it out immediately.
+
+## Tools
+
+Every tool works on one API, which it finds by the public `api_id` from your endpoint URL. The Request column shows whether a call counts as one [request](/what-is-a-request) of your plan, the same as one HTTP request.
+
+<div className="overflow-x-auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>What it does</th>
+        <th>Request</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>list_apis</code></td>
+        <td>Your APIs and the ones shared with your team: <code>api_id</code>, name, whether shared by a teammate, what the agent may do</td>
+        <td>no</td>
+      </tr>
+      <tr>
+        <td><code>describe_api</code></td>
+        <td>Column names, number of records, tabs and 3 sample records</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><code>read_records</code></td>
+        <td>Reads records page by page (<code>limit</code> up to 5000, <code>offset</code>), tab, sorting, read <code>mode</code></td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><code>search_records</code></td>
+        <td>AND (<code>all</code>) or OR (<code>any</code>) conditions with the same operators and wildcards as <a href="/sheetdb-api/search"><code>/search</code></a></td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><code>create_records</code></td>
+        <td>Appends records; special values (<code>INCREMENT</code>, <code>TIMESTAMP</code>, <code>DATETIME</code>) and write <code>mode</code> work as over HTTP</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><code>update_records</code></td>
+        <td>Updates matching records; above the Approval threshold, or when the API requires panel approval, it creates a Pending action instead</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><code>delete_records</code></td>
+        <td>Counts the matching records and returns a preview as a Pending action. It deletes nothing itself unless approval is off for the API</td>
+        <td>yes (the preview)</td>
+      </tr>
+      <tr>
+        <td><code>confirm_delete</code></td>
+        <td>Executes a Pending action within the Approval threshold (<code>pending_id</code>, <code>expected_count</code>)</td>
+        <td>no</td>
+      </tr>
+      <tr>
+        <td><code>get_pending_action</code></td>
+        <td>Status of a Pending action: <code>pending</code>, <code>executed</code>, <code>rejected</code>, <code>expired</code></td>
+        <td>no</td>
+      </tr>
+      <tr>
+        <td><code>create_api_from_spreadsheet</code></td>
+        <td>Creates an API from a Google Sheets URL, like Create API in the panel</td>
+        <td>no</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+These operations are not available through MCP: deleting a whole tab, creating and deleting tabs, single cells, JSON import, cache purge, statistics, CSV export.
+
+## Agent permissions
+
+After your first Agent connection every API gets an **AI agents** section in its settings. Agents can only read until you enable create, update or delete for that API. Agent permissions work on top of the [API permissions](/permissions), and only what both allow is possible. If an operation is disabled for the API over HTTP, agents cannot use it either, whatever the AI agents section says.
+
+When a tool call is refused, the agent gets an ordinary answer (not a protocol error) with a link to the settings page where you can enable the operation.
+
+In a team, the agent sees the same APIs you see in the panel: your own and, with Shared APIs, your team's. Agent permissions are set by whoever may manage the API, which is the owner or a member with Shared settings.
+
+## Approval threshold and Pending actions
+
+`delete_records` and, above the threshold, `update_records` do not change anything. They store a **Pending action** and return a preview written by SheetDB: the count, a sample of up to 10 records and a `pending_id`. Each API has an **Approval threshold** setting:
+
+- **Confirm in chat up to the threshold** (default). The threshold is 10 records and 5% of the records in the tab. Up to it, the agent shows you the preview and, once you agree, calls `confirm_delete` with the exact `expected_count`. The server rejects any other count. Right before executing it re-reads the records from Google, and if they changed it returns a new preview instead.
+- **Always approve in panel**. Every delete or mass update waits until you click Approve or Reject in the panel, under **AI agents → Actions waiting for your approval**. The agent gets a link to it and checks the result with `get_pending_action`.
+- **No approval**. Deletes and updates run at once, as they do over HTTP.
+
+Above the threshold, the action goes to the panel whatever the setting is. A Pending action can be used once, only by the Agent connection that proposed it, and it expires after 5 minutes in chat or 15 minutes in the panel. A rejected or expired action reports its status, so the agent knows not to retry.
+
+## Requests and limits
+
+- A tool call that reads or writes records counts as one [request](/what-is-a-request) of the API owner, regardless of the number of records. `list_apis`, `get_pending_action`, `confirm_delete` and `create_api_from_spreadsheet` do not count. The preview of `delete_records` counts as one; the execution does not.
+- API statistics list requests made by agents separately.
+- The per-API [rate limit](/limits) and the [cache](/cache) work as they do for HTTP. On top of that, each Agent connection may make 30 tool calls per minute. Above that, the agent is told to slow down and when it can retry.
+- MCP is available on every plan, including Free.
+
+## Security notes
+
+- The agent sees only what you see in the panel and only the public `api_id`, never internal identifiers or other users' data.
+- Every call goes through these checks in order: your sign-in and the Agent connection, access to the API, API permissions, Agent permissions and the Approval threshold.
+- SheetDB treats cell values as data, never as instructions. Tool results tell the model so and never contain text phrased as a command. This lowers the risk of prompt injection from shared sheets but cannot remove it, which is one reason deletes need confirmation outside the sheet.
+- You can revoke an Agent connection at any time under **AI agents**, or turn off single operations for one API and keep the connection.

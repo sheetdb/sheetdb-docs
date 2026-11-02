@@ -222,6 +222,12 @@ export const navigation = [
     ]
   },
   {
+    title: 'AI agents',
+    links: [
+      { title: 'MCP server', href: '/ai-agents/mcp-server' },
+    ],
+  },
+  {
     title: 'Other',
     links: [
       { title: 'HTML Snippet', href: '/handlebars' },
