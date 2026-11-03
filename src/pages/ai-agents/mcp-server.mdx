@@ -88,7 +88,7 @@ Every tool works on one API, which it finds by the public `api_id` from your end
         <td>yes (the preview)</td>
       </tr>
       <tr>
-        <td><code>confirm_delete</code></td>
+        <td><code>confirm_pending_action</code></td>
         <td>Executes a Pending action within the Approval threshold (<code>pending_id</code>, <code>expected_count</code>)</td>
         <td>no</td>
       </tr>
@@ -118,17 +118,17 @@ In a team, the agent sees the same APIs you see in the panel: your own and, with
 
 ## Approval threshold and Pending actions
 
-`delete_records` and, above the threshold, `update_records` do not change anything. They store a **Pending action** and return a preview written by SheetDB: the count, a sample of up to 10 records and a `pending_id`. Each API has an **Approval threshold** setting:
+Unless approval is off for the API, `delete_records` changes nothing on its own, and neither does `update_records` above the threshold or on an API that requires panel approval. These calls store a **Pending action** and return a preview written by SheetDB: the count, a sample of up to 10 records and a `pending_id`. Each API has an **Approval threshold** setting:
 
-- **Confirm in chat up to the threshold** (default). The threshold is 10 records and 5% of the records in the tab. Up to it, the agent shows you the preview and, once you agree, calls `confirm_delete` with the exact `expected_count`. The server rejects any other count. Right before executing it re-reads the records from Google, and if they changed it returns a new preview instead.
-- **Always approve in panel**. Every delete or mass update waits until you click Approve or Reject in the panel, under **AI agents → Actions waiting for your approval**. The agent gets a link to it and checks the result with `get_pending_action`.
-- **No approval**. Deletes and updates run at once, as they do over HTTP.
+- **Confirm in chat up to the threshold** (default). The threshold is 10 records and 5% of the records in the tab. Up to it, an update runs at once. For a delete, the agent shows you the preview and, once you agree, calls `confirm_pending_action` with the exact `expected_count`. The server rejects any other count. Right before executing it re-reads the records from Google, and if they changed it returns a new preview instead. Above the threshold, the action waits for you in the panel, as with the next setting.
+- **Always approve in panel**. Every delete or update waits until you click Approve or Reject in the panel, under **AI agents → Actions waiting for your approval**. The agent gets a link to it and checks the result with `get_pending_action`.
+- **No approval**. Deletes and updates run at once, whatever their size, as they do over HTTP. There is no preview and no Pending action. This setting is off by default.
 
-Above the threshold, the action goes to the panel whatever the setting is. A Pending action can be used once, only by the Agent connection that proposed it, and it expires after 5 minutes in chat or 15 minutes in the panel. A rejected or expired action reports its status, so the agent knows not to retry.
+A Pending action can be used once, only by the Agent connection that proposed it, and it expires after 5 minutes in chat or 15 minutes in the panel. A rejected or expired action reports its status, so the agent knows not to retry.
 
 ## Requests and limits
 
-- A tool call that reads or writes records counts as one [request](/what-is-a-request) of the API owner, regardless of the number of records. `list_apis`, `get_pending_action`, `confirm_delete` and `create_api_from_spreadsheet` do not count. The preview of `delete_records` counts as one; the execution does not.
+- A tool call that reads or writes records counts as one [request](/what-is-a-request) of the API owner, regardless of the number of records. `list_apis`, `get_pending_action`, `confirm_pending_action` and `create_api_from_spreadsheet` do not count. The preview of `delete_records` counts as one; the execution does not.
 - API statistics list requests made by agents separately.
 - The per-API [rate limit](/limits) and the [cache](/cache) work as they do for HTTP. On top of that, each Agent connection may make 30 tool calls per minute. Above that, the agent is told to slow down and when it can retry.
 - MCP is available on every plan, including Free.
@@ -137,5 +137,9 @@ Above the threshold, the action goes to the panel whatever the setting is. A Pen
 
 - The agent sees only what you see in the panel and only the public `api_id`, never internal identifiers or other users' data.
 - Every call goes through these checks in order: your sign-in and the Agent connection, access to the API, API permissions, Agent permissions and the Approval threshold.
-- SheetDB treats cell values as data, never as instructions. Tool results tell the model so and never contain text phrased as a command. This lowers the risk of prompt injection from shared sheets but cannot remove it, which is one reason deletes need confirmation outside the sheet.
+- SheetDB treats cell values as data, never as instructions. The server instructions and tool descriptions tell the model so. Instructions in a tool result, such as the next step after a preview, come only from SheetDB's own templates, never from cell values. This lowers the risk of prompt injection from shared sheets but cannot remove it, which is one reason deletes need confirmation outside the sheet.
 - You can revoke an Agent connection at any time under **AI agents**, or turn off single operations for one API and keep the connection.
+
+## Support
+
+For help with the MCP server, email [support@sheetdb.io](mailto:support@sheetdb.io).
