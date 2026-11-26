@@ -20,19 +20,29 @@ The server uses the Streamable HTTP transport and OAuth 2.1 with dynamic client 
 
 The server answers `POST /mcp`. Opening `GET /mcp` in a browser shows the overview page. An SSE request gets `405 Allow: POST`, because SheetDB sends no server-initiated messages.
 
-On an Enterprise instance the server is at `https://{subdomain}.sheetdb.io/mcp`. Sign-in always goes through `sheetdb.io`.
+On an Enterprise instance the server is at `https://{subdomain}.sheetdb.io/mcp`. Sign-in always goes through `sheetdb.io`. The plugin in the ChatGPT plugin directory connects to `https://sheetdb.io/mcp`, so in ChatGPT add the server of your instance as a custom MCP server.
 
 ## Connecting a client
 
-1. Add the server URL in your client:
-   - Claude.ai and Claude Desktop: Settings → Connectors → Add custom connector.
-   - ChatGPT: Settings → Connectors → Create, authentication OAuth.
-   - Cursor: Settings → MCP → Add new MCP server.
+1. Add SheetDB in your client:
+   - Claude.ai and Claude Desktop: Customize → Connectors → + Add → Add custom connector, and keep Sign in now. On Team and Enterprise an owner adds it under Organization settings → Connectors, and members click Connect. See [Claude with Google Sheets](https://sheetdb.io/use-cases/claude-with-google-sheets).
+   - ChatGPT: install [SheetDB from the ChatGPT plugin directory](https://chatgpt.com/plugins/plugin_asdk_app_6ae9ccea0dcc81918c461003b554de36) with Install plugin. The plugin directory is available across ChatGPT plans, but installing a plugin depends on your plan, workspace, role and region. In Enterprise and Edu workspaces new plugins are generally off by default until an administrator makes them available. You can also add the server yourself under Plugins → + → Add custom MCP server, with authentication OAuth, then Create as a plugin. A custom MCP server reads and writes on Business and Enterprise/Edu and is read-only on Pro. See [ChatGPT with Google Sheets](https://sheetdb.io/use-cases/chatgpt-with-google-sheets).
+   - Cursor: add the configuration below to `~/.cursor/mcp.json` or `.cursor/mcp.json`, or use the install link on [Cursor with Google Sheets](https://sheetdb.io/use-cases/cursor-with-google-sheets).
    - Claude Code: run the command below, then `/mcp`.
 2. Sign in with Google on the SheetDB page that opens.
 3. Approve the connection.
 
-```bash
+```json {{ title: 'Cursor' }}
+{
+  "mcpServers": {
+    "sheetdb": {
+      "url": "https://sheetdb.io/mcp"
+    }
+  }
+}
+```
+
+```bash {{ title: 'Claude Code' }}
 claude mcp add --transport http sheetdb https://sheetdb.io/mcp
 ```
 
@@ -99,7 +109,7 @@ Every tool works on one API, which it finds by the public `api_id` from your end
       </tr>
       <tr>
         <td><code>create_api_from_spreadsheet</code></td>
-        <td>Creates an API from a Google Sheets URL, like Create API in the panel</td>
+        <td>Connects a spreadsheet from its Google Sheets link or ID; connecting the same spreadsheet again returns the existing API. The new API is <a href="#agent-only-apis">agent-only</a></td>
         <td>no</td>
       </tr>
     </tbody>
@@ -115,6 +125,14 @@ After your first Agent connection every API gets an **AI agents** section in its
 When a tool call is refused, the agent gets an ordinary answer (not a protocol error) with a link to the settings page where you can enable the operation.
 
 In a team, the agent sees the same APIs you see in the panel: your own and, with Shared APIs, your team's. Agent permissions are set by whoever may manage the API, which is the owner or a member with Shared settings.
+
+## Agent-only APIs
+
+An API that an agent creates in the chat with `create_api_from_spreadsheet` is **agent-only**, which means its REST API is off. Your AI agents use it as usual, within its Agent permissions. Every HTTP request to it, form and table snippets included, gets a 403 JSON error saying the REST API is turned off.
+
+To use the API from your own code, open its settings and click **Turn on REST API**. Review the [API permissions](/permissions) when you do, because anyone with the API ID can do what they allow. The **REST API** switch turns it off again.
+
+APIs created in the panel, including on the agent authorization screen, have the REST API on.
 
 ## Approval threshold and Pending actions
 
